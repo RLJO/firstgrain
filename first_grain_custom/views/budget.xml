@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="firstgrain_crossovered_budget_view_form" model="ir.ui.view">
+            <field name="name">crossovered.budget.form.inherit.firstgrain</field>
+            <field name="model">crossovered.budget</field>
+            <field name="inherit_id" ref="account_budget.crossovered_budget_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook//page[1]" position="after">
+                    <page name="firstgrain" string="Budget over Payment Types">
+                        <field name="budget_new_line">
+                            <tree  editable="bottom">
+                                <field name="payment_term_id"/>
+                                <field name="qty"/>
+                                <field name="net_loss"/>
+                                <field name="total_loss"/>
+                                <field name="note"/>
+                            </tree>
+
+                        </field>
+                    </page>
+                </xpath>
+
+                <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree//field[@name='theoritical_amount']" position="after">
+                    <field name="planned_qty"/>
+                    <field name="actual_qty"/>
+                </xpath>
+
+            </field>
+        </record>
+</odoo>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="contract_form_view_tree" model="ir.ui.view">
+        <field name="name">contract.form.tree</field>
+        <field name="model">contract.form</field>
+        <field name="arch" type="xml">
+            <tree string="Operation">
+                <field name="name" />
+                <field name="contract_date"/>
+                <field name="vendor"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="contract_form_view_form" model="ir.ui.view">
+        <field name="name">contract.form.from</field>
+        <field name="model">contract.form</field>
+        <field name="arch" type="xml">
+            <form>
+                 <header>
+                    <button string="Request Approval" type="object" states="new" name="action_request_approval" class="oe_highlight"/>
+                    <button string="Approve" type="object" states="request_approval" name="action_approve" class="oe_highlight" groups="first_grain_custom.group_gm,account.group_account_manager"/>
+                    <button string="Confirm" type="object" states="Wait_ceo_confirm" name="action_confirm" class="oe_read_only" groups="first_grain_custom.group_ceo"/>
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <label class="col-form-label" for="name">Number</label>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="vendor"/>
+                             <label for="street" string="Address"/>
+                                        <div class="o_address_format">
+                                            <field name="street" placeholder="Street..." class="o_address_street"/>
+                                            <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                            <field name="city" placeholder="City" class="o_address_city"/>
+                                            <field name="state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                                            <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                            <field name="country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                                        </div>
+                            <field name="customer"/>
+                             <label for="street" string="Address"/>
+                                        <div class="o_address_format">
+                                            <field name="c_street" placeholder="Street..." class="o_address_street"/>
+                                            <field name="c_street2" placeholder="Street 2..." class="o_address_street"/>
+                                            <field name="c_city" placeholder="City" class="o_address_city"/>
+                                            <field name="c_state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                                            <field name="c_zip" placeholder="ZIP" class="o_address_zip"/>
+                                            <field name="c_country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                                        </div>
+                            <field name="quantity"/>
+                            <field name="quantity_note"/>
+                            <field name="quality"/>
+                            <field name="price"/>
+                            <field name="prov_price"/>
+                        </group>
+                        <group>
+                            <field name="source_document_rfq"/>
+                            <field name="payment_term"/>
+                            <field name="contract_date"/>
+                            <field name="origin"/>
+                            <field name="delivery_term"/>
+                            <field name="shipment_period"/>
+                            <field name="protection"/>
+                            <field name="fail_pay_dil"/>
+                            <field name="load_doc_instruction"/>
+                            <field name="discharge"/>
+                            <field name="licenses"/>
+                            <field name="taxation"/>
+                            <field name="title_risk"/>
+                            <field name="low_jurisduction"/>
+                            <field name="compliance"/>
+                            <field name="antiboycott"/>
+                            <field name="confidentiality"/>
+                            <field name="assignment_clause"/>
+                            <field name="limit_liability"/>
+                            <field name="terms_conds_rule"/>
+                            <field name="language"/>
+                        </group>
+
+                    </group>
+                    <notebook>
+                        <page name="form4" string="Form 4">
+
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="contract_action_main" model="ir.actions.act_window">
+        <field name="name">Contract</field>
+        <field name="res_model">contract.form</field>
+        <field name="view_mode">tree,form</field>
+<!--        <field name="search_view_id" ref="user_partner_discount_view_search"/>-->
+    </record>
+
+    <menuitem name="Contract"
+              id="contract_menu_first"
+              groups="base.group_user"
+              sequence="8"
+              action="contract_action_main"
+              />
+
+    <menuitem name="Contract"
+              id="contract_menu_second"
+              action="contract_action_main"
+              groups="base.group_user"
+              sequence="1"
+              parent="contract_menu_first"
+              />
+
+</odoo>

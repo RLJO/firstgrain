@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 budget_line_access_full,budget_line_access_full,model_crossovered_budget_new_line,base.group_user,1,1,1,1
-
+operation_logistic_access_full,operation_logistic_access_full,model_operation_logistic,base.group_user,1,1,1,1
+contract_form_access_full,contract_form_access_full,model_contract_form,base.group_user,1,1,1,1

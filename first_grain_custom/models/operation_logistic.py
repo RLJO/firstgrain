@@ -3,14 +3,14 @@ from datetime import datetime, timedelta, time
 
 
 
-class BillLeading(models.Model):
+class Operation(models.Model):
     _name = "operation.logistic"
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
     _description = "Operation And Logistic"
 
     name = fields.Char('')
     purchase_id = fields.Many2one('purchase.order','Purchase Order')
-    contract_no = fields.Char('Contract No.')
+    contract_no = fields.Many2one('contract.form','Contract No.')
     arrived_date = fields.Date('Date Arrived')
 
     # First Tab
@@ -58,7 +58,13 @@ class BillLeading(models.Model):
     phyto_attachment = fields.Binary('Phyto Attachment')
     phyto_docment = fields.Binary('Phyto Docment')
 
+    notification_status = fields.Char()
+    show_review = fields.Boolean(default=False)
 
+    state = fields.Selection([('new', 'New'), ('request_review', 'Wait PO Review'),('request_gm_ceo','Wait GM - CEO Approve'),('approved','Approved')], default='new', string="State", index=True)
+    log_line_ids = fields.One2many('operation.log','operation_id')
+
+    bill_no = fields.Many2one('bill.leading','Bill No ')
     @api.onchange('form4_attachment')
     def get_form4_attachment(self):
         if self.form4_attachment :
@@ -71,6 +77,7 @@ class BillLeading(models.Model):
         user_ids = self.env['res.users'].search([('groups_id', 'in', [operation_manger_id,account_manager_id])])
 
         if user_ids:
+            self.notification_status = 'Operation ' + self.name + ' asked for form4'
             for user_id in user_ids:
                 activity_ins = self.env['mail.activity'].sudo().create(
                     {'res_id': self.id,
@@ -88,9 +95,12 @@ class BillLeading(models.Model):
 
     def action_done_form4(self):
         print("Noti")
+        self.show_review = True
         operation_manger_id = self.env.ref('first_grain_custom.group_operation_l_manager').id
-        user_ids = self.env['res.users'].search([('groups_id', 'in', [operation_manger_id])])
+        ex_manger_id = self.env.ref('first_grain_custom.group_ex_manager').id
+        user_ids = self.env['res.users'].search([('groups_id', 'in', [operation_manger_id,ex_manger_id])])
         if user_ids:
+            self.notification_status = 'Operation ' + self.name + ' Form4 is done'
             for user_id in user_ids:
                 activity_ins = self.env['mail.activity'].sudo().create(
                     {'res_id': self.id,
@@ -105,30 +115,171 @@ class BillLeading(models.Model):
                      'recommended_activity_type_id': False,
                      'user_id': user_id.id
                      })
-
-    def action_done_custom(self):
-        print("send Notification for operation  ")
-
-    def action_done_phyto(self):
-        print("Send Notification")
-
-    def send_to_channel(self):
+    def action_review_form4(self):
+        print('Review Action')
         operation_manger_id = self.env.ref('first_grain_custom.group_operation_l_manager').id
-        if operation_manger_id:
-            user_ids = self.env['res.users'].search([('groups_id', 'in', [operation_manger_id])])
+        account_manager_id = self.env.ref('account.group_account_manager').id
+        user_ids = self.env['res.users'].search([('groups_id', 'in', [operation_manger_id, account_manager_id])])
         if user_ids:
+            self.notification_status = 'Operation ' + self.name + ' Form4 is Reviewed'
             for user_id in user_ids:
                 activity_ins = self.env['mail.activity'].sudo().create(
                     {'res_id': self.id,
                      'res_model_id': self.env['ir.model'].search([('model', '=', 'operation.logistic')], limit=1).id,
                      'res_model': 'operation.logistic',
                      'activity_type_id': 4,
-                     'summary': 'Form 4 Request',
-                     'note': 'Operation '+self.name+' asked for form4',
-                     'date_deadline': fields.Date.today()+timedelta(days=1),
+                     'summary': 'Form 4 Is Done',
+                     'note': 'Operation ' + self.name + ' Form4 is reviewed',
+                     'date_deadline': fields.Date.today() + timedelta(days=1),
                      'activity_category': 'default',
                      'previous_activity_type_id': False,
                      'recommended_activity_type_id': False,
                      'user_id': user_id.id
                      })
+
+    def action_done_custom(self):
+        print("send Notification for operation  ")
+        logistic_manger_id = self.env.ref('first_grain_custom.group_logistic_manager').id
+        user_ids = self.env['res.users'].search([('groups_id', 'in', [logistic_manger_id])])
+        if user_ids:
+            self.notification_status = 'Operation ' + self.name + ' Customs is done'
+            for user_id in user_ids:
+                activity_ins = self.env['mail.activity'].sudo().create(
+                    {'res_id': self.id,
+                     'res_model_id': self.env['ir.model'].search([('model', '=', 'operation.logistic')], limit=1).id,
+                     'res_model': 'operation.logistic',
+                     'activity_type_id': 4,
+                     'summary': 'Form 4 Is Done',
+                     'note': 'Operation ' + self.name + ' Customs is done',
+                     'date_deadline': fields.Date.today() + timedelta(days=1),
+                     'activity_category': 'default',
+                     'previous_activity_type_id': False,
+                     'recommended_activity_type_id': False,
+                     'user_id': user_id.id
+                     })
+
+    def action_done_phyto(self):
+        print("Send Notification")
+        logistic_manger_id = self.env.ref('first_grain_custom.group_logistic_manager').id
+        operation_manger_id = self.env.ref('first_grain_custom.group_operation_l_manager').id
+        ex_manger_id = self.env.ref('first_grain_custom.group_ex_manager').id
+        gm_id = self.env.ref('first_grain_custom.group_gm').id
+        ceo_id = self.env.ref('first_grain_custom.group_ceo').id
+        user_ids = self.env['res.users'].search([('groups_id', 'in', [gm_id,ceo_id,logistic_manger_id,operation_manger_id,ex_manger_id])])
+        if user_ids:
+            self.notification_status = 'Operation ' + self.name + ' Phyto is done'
+            for user_id in user_ids:
+                activity_ins = self.env['mail.activity'].sudo().create(
+                    {'res_id': self.id,
+                     'res_model_id': self.env['ir.model'].search([('model', '=', 'operation.logistic')], limit=1).id,
+                     'res_model': 'operation.logistic',
+                     'activity_type_id': 4,
+                     'summary': 'Form 4 Is Done',
+                     'note': 'Operation ' + self.name + ' Phyto is done',
+                     'date_deadline': fields.Date.today() + timedelta(days=1),
+                     'activity_category': 'default',
+                     'previous_activity_type_id': False,
+                     'recommended_activity_type_id': False,
+                     'user_id': user_id.id
+                     })
+
+
+# Operation Action buttons
+
+    def action_request_approval_pom(self):
+        self.state = 'request_review'
+        print("Send Notification")
+        po_id = self.env.ref('purchase.group_purchase_manager').id
+        user_ids = self.env['res.users'].search(
+            [('groups_id', 'in', [po_id])])
+        if user_ids:
+            self.notification_status = 'Operation ' + self.name + 'needs Purchase Manager Review'
+            for user_id in user_ids:
+                activity_ins = self.env['mail.activity'].sudo().create(
+                    {'res_id': self.id,
+                     'res_model_id': self.env['ir.model'].search([('model', '=', 'operation.logistic')], limit=1).id,
+                     'res_model': 'operation.logistic',
+                     'activity_type_id': 4,
+                     'summary': 'Form 4 Is Done',
+                     'note': 'Operation ' + self.name + 'needs Purchase Manager Review',
+                     'date_deadline': fields.Date.today() + timedelta(days=1),
+                     'activity_category': 'default',
+                     'previous_activity_type_id': False,
+                     'recommended_activity_type_id': False,
+                     'user_id': user_id.id
+                     })
+        
+    def action_approve_pom(self):
+        self.state = 'request_gm_ceo'
+        print("Send Notification")
+        gm_id = self.env.ref('first_grain_custom.group_gm').id
+        ceo_id = self.env.ref('first_grain_custom.group_ceo').id
+        user_ids = self.env['res.users'].search([('groups_id', 'in', [gm_id,ceo_id])])
+        if user_ids:
+            self.notification_status = 'Operation ' + self.name + ' (Purchase Manager reviewed) , needs GM / CEO Approve'
+            for user_id in user_ids:
+                activity_ins = self.env['mail.activity'].sudo().create(
+                    {'res_id': self.id,
+                     'res_model_id': self.env['ir.model'].search([('model', '=', 'operation.logistic')], limit=1).id,
+                     'res_model': 'operation.logistic',
+                     'activity_type_id': 4,
+                     'summary': 'Form 4 Is Done',
+                     'note': 'Operation ' + self.name +  ' (Purchase Manager reviewed) , needs GM / CEO Approve',
+                     'date_deadline': fields.Date.today() + timedelta(days=1),
+                     'activity_category': 'default',
+                     'previous_activity_type_id': False,
+                     'recommended_activity_type_id': False,
+                     'user_id': user_id.id
+                     })
+
+    def action_approve_gm_ceo(self):
+        self.state = 'approved'
+        print("Send Notification")
+        logistic_manger_id = self.env.ref('first_grain_custom.group_logistic_manager').id
+        operation_manger_id = self.env.ref('first_grain_custom.group_operation_l_manager').id
+        ex_manger_id = self.env.ref('first_grain_custom.group_ex_manager').id
+        user_ids = self.env['res.users'].search([('groups_id', 'in', [logistic_manger_id,operation_manger_id,ex_manger_id])])
+        if user_ids:
+            self.notification_status = 'Operation ' + self.name + ' GM / CEO Approved'
+            for user_id in user_ids:
+                activity_ins = self.env['mail.activity'].sudo().create(
+                    {'res_id': self.id,
+                     'res_model_id': self.env['ir.model'].search([('model', '=', 'operation.logistic')], limit=1).id,
+                     'res_model': 'operation.logistic',
+                     'activity_type_id': 4,
+                     'summary': 'Form 4 Is Done',
+                     'note': 'Operation ' + self.name + ' GM / CEO Approved',
+                     'date_deadline': fields.Date.today() + timedelta(days=1),
+                     'activity_category': 'default',
+                     'previous_activity_type_id': False,
+                     'recommended_activity_type_id': False,
+                     'user_id': user_id.id
+                     })
+        
+    def write(self,vals):
+        operation = super(Operation, self).write(vals)
+        if vals.get('log_line_ids'):
+            # Send Notification
+            print("Send Notification")
+            operation_manger_id = self.env.ref('first_grain_custom.group_operation_l_manager').id
+            user_ids = self.env['res.users'].search([('groups_id', 'in', [operation_manger_id])])
+            if user_ids:
+                self.notification_status = 'Operation ' + self.name + ' Log Updated'
+                for user_id in user_ids:
+                    # raise Warning(user_id)
+                    activity_ins = self.env['mail.activity'].sudo().create(
+                        {'res_id': self.id,
+                         'res_model_id': self.env['ir.model'].search([('model', '=', 'operation.logistic')],limit=1).id,
+                         'res_model': 'operation.logistic',
+                         'activity_type_id': 4,
+                         'summary': 'Form 4 Is Done',
+                         'note': 'Operation ' + self.name + 'Log Updated',
+                         'date_deadline': fields.Date.today() + timedelta(days=1),
+                         'activity_category': 'default',
+                         'previous_activity_type_id': False,
+                         'recommended_activity_type_id': False,
+                         'user_id': user_id.id
+                         })
+
+        return operation
 

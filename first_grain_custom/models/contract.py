@@ -56,6 +56,7 @@ class BillLeading(models.Model):
     language = fields.Char('Language')
 
     state = fields.Selection([('new', 'New'), ('request_approval', 'Request Approval'),('Wait_ceo_confirm','Wait CEO Confirm'),('confirmed','Confirmed')], default='new', string="State", index=True)
+    notification_status = fields.Char()
 
     def action_request_approval(self):
         self.state = 'request_approval'
@@ -64,6 +65,7 @@ class BillLeading(models.Model):
         account_manager_id = self.env.ref('account.group_account_manager').id
         user_ids = self.env['res.users'].search([('groups_id', 'in', [gm_id,account_manager_id])])
         if user_ids:
+            self.notification_status = 'Contract ' + str(self.name) + ' asked for Approval'
             for user_id in user_ids:
                 activity_ins = self.env['mail.activity'].sudo().create(
                     {'res_id': self.id,
@@ -86,6 +88,7 @@ class BillLeading(models.Model):
         ceo_id = self.env.ref('first_grain_custom.group_ceo').id
         user_ids = self.env['res.users'].search([('groups_id', 'in', [ceo_id])])
         if user_ids:
+            self.notification_status = 'Contract ' + self.name + 'need Confirm'
             for user_id in user_ids:
                 activity_ins = self.env['mail.activity'].sudo().create(
                     {'res_id': self.id,
@@ -116,6 +119,7 @@ class BillLeading(models.Model):
         account_manager_id = self.env.ref('account.group_account_manager').id
         user_ids = self.env['res.users'].search([('groups_id', 'in', [gm_id, account_manager_id])])
         if user_ids:
+            self.notification_status = 'Operation ' + self.name + 'has been created'
             for user_id in user_ids:
                 activity_ins = self.env['mail.activity'].sudo().create(
                     {'res_id': self.id,

@@ -2,5 +2,10 @@ from . import product_template
 from . import budget_changes
 from . import account_invoice
 from . import contract
+from . import operation_log
 from . import operation_logistic
-
+from . import sale_order
+from . import bill_leading
+from . import stock_picking
+from . import sale_order_type
+from . import delivery_order_type

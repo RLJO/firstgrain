@@ -19,6 +19,12 @@
         <field name="model">operation.logistic</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button string="Request PO Review" type="object" states="new" name="action_request_approval_pom" class="oe_highlight" groups="first_grain_custom.group_operation_l_manager"/>
+                    <button string="Approve" type="object" states="request_review" name="action_approve_pom" class="oe_highlight" groups="purchase.group_purchase_manager"/>
+                    <button string="Approve" type="object" states="request_gm_ceo" name="action_approve_gm_ceo" class="oe_highlight" groups="first_grain_custom.group_gm,first_grain_custom.group_ceo"/>
+                    <field name="state" widget="statusbar" />
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <h1>
@@ -44,11 +50,13 @@
                                 </group>
                                 <group>
                                     <field name="form4_attachment"/>
+                                    <field name="show_review" invisible="1"/>
                                 </group>
 
                                 <button name="action_ask_for_form4" string="Request form 4" type="object"></button>
                                 <button name="action_done_form4" string="Done" type="object" groups="account.group_account_manager"></button>
-                                <button name="action_review_form4" string="Review" type="object" groups="first_grain_custom.group_operation_l_user"/>
+                                <button name="action_review_form4" string="Review" type="object" groups="first_grain_custom.group_operation_l_user,first_grain_custom.group_logistic_manager" attrs="{'invisible':[('show_review','=',False)]}"/>
+
                             </group>
                         </page>
                         <page name="customs" string="Customs">
@@ -63,7 +71,7 @@
                             </group>
 
                         </page>
-                        <page name="customs" string="Phyto">
+                        <page name="phyto" string="Phyto">
                             <group>
                                 <group>
                                     <field name="phyto_attachment"/>
@@ -111,6 +119,22 @@
                             </group>
 
                         </page>
+                        <page name="log" string="Log">
+                            <field name="log_line_ids">
+                                <tree editable="bottom">
+                                    <field name="date"/>
+                                    <field name="description"/>
+                                    <field name="user_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="bill_leading" string="Bill Leading" attrs="{'invisible':[('bill_no','=',False)]}">
+                            <group>
+                                <group>
+                                    <field name="bill_no"/>
+                                </group>
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">
@@ -122,11 +146,32 @@
         </field>
     </record>
 
+    <record id="contract_kanban_view_form" model="ir.ui.view">
+            <field name="name">operation.logistic.kanban</field>
+            <field name="model">operation.logistic</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div>
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div>
+                                    <span><field name="notification_status"/>&amp;nbsp;</span>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+    </record>
+
 
     <record id="operation_logistic_action_main" model="ir.actions.act_window">
         <field name="name">Operation</field>
         <field name="res_model">operation.logistic</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,kanban</field>
 <!--        <field name="search_view_id" ref="user_partner_discount_view_search"/>-->
     </record>
 

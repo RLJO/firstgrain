@@ -1,12 +1,23 @@
 # See LICENSE file for full copyright and licensing details.
 
 
-from odoo import api, models, _
+from odoo import api, models, _,fields
 from odoo.exceptions import UserError
 
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
+
+    state = fields.Selection([
+        ('draft', 'Quotation'),
+        ('sent', 'Quotation Sent'),
+        ('approve_credit_limit','Approve Credit Limit'),
+        ('sale', 'Sales Order'),
+        ('done', 'Locked'),
+        ('cancel', 'Cancelled'),
+    ], string='Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
+
+    no_credit_has_ceo_access = fields.Boolean(default=True)
 
     def check_limit(self):
         self.ensure_one()
@@ -37,12 +48,22 @@ class SaleOrder(models.Model):
 
             if (amount_total - debit) > partner_credit_limit:
                 if not partner.over_credit:
-                    msg = 'Your available credit limit' \
-                          ' Amount = %s \nCheck "%s" Accounts or Credit ' \
-                          'Limits.' % (available_credit_limit,
-                                       self.partner_id.name)
-                    raise UserError(_('You can not confirm Sale '
-                                      'Order. \n' + msg))
+
+                    # STOP THIS STOP __________________________________ STOP
+                    # msg = 'Your available credit limit' \
+                    #       ' Amount = %s \nCheck "%s" Accounts or Credit ' \
+                    #       'Limits.' % (available_credit_limit,
+                    #                    self.partner_id.name)
+                    # raise UserError(_('You can not confirm Sale '
+                    #                   'Order. \n' + msg))
+
+                ####  NEW CODE __________________________________________ NEW
+                    self.state = 'approve_credit_limit'
+                    if self.user_has_groups('first_grain_custom.group_ceo'):
+                        self.no_credit_has_ceo_access = True
+                    else:
+                        self.no_credit_has_ceo_access = False
+
                 partner.write(
                     {'credit_limit': credit - debit + self.amount_total})
             return True

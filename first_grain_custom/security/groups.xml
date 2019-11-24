@@ -5,6 +5,15 @@
 <!--        <field name="name">CEO</field>-->
 <!--    </record>-->
 
+
+    <record id ="group_logistic_manager" model="res.groups" ><!--- name of the group -->
+        <field name="category_id" ref="base.module_category_usability"/>
+        <field name="name">Logistic Specialist</field>
+    </record>
+    <record id ="group_ex_manager" model="res.groups" ><!--- name of the group -->
+        <field name="category_id" ref="base.module_category_usability"/>
+        <field name="name">Execution Manager</field>
+    </record>
     <record id ="group_gm" model="res.groups" ><!--- name of the group -->
         <field name="category_id" ref="base.module_category_usability"/>
         <field name="name">GM</field>
@@ -16,11 +25,11 @@
 
     <record id ="group_operation_l_user" model="res.groups" ><!--- name of the group -->
         <field name="category_id" ref="base.module_category_usability"/>
-        <field name="name">Operation and Logistic specialist</field>
+        <field name="name">Operation Specialist</field>
     </record>
 
     <record id ="group_operation_l_manager" model="res.groups" ><!--- name of the group -->
         <field name="category_id" ref="base.module_category_usability"/>
-        <field name="name">Operation And Logistic Manager</field>
+        <field name="name">Operation Manager</field>
     </record>
 </odoo>

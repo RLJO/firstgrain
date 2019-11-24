@@ -99,11 +99,32 @@
         </field>
     </record>
 
+    <record id="contract_kanban_view_form" model="ir.ui.view">
+            <field name="name">contract.form.kanban</field>
+            <field name="model">contract.form</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div>
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div>
+                                    <span><field name="notification_status"/>&amp;nbsp;</span>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+    </record>
+
 
     <record id="contract_action_main" model="ir.actions.act_window">
         <field name="name">Contract</field>
         <field name="res_model">contract.form</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,kanban</field>
 <!--        <field name="search_view_id" ref="user_partner_discount_view_search"/>-->
     </record>
 

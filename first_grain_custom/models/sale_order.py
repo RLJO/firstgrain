@@ -9,6 +9,7 @@ class SaleOrder(models.Model):
     notifi_state = fields.Char()
     delivery_method = fields.Selection([('direct_bulk','Direct Bulk'),('direct_packed','Direct Packed'),('indirect_bulk','Indirect Bulk'),('indirect_packed','Indirect Packed')],'Delivery method')
 
+    last_state = fields.Char()
     def action_confirm(self):
         res = super(SaleOrder, self).action_confirm()
 
@@ -30,10 +31,114 @@ class SaleOrder(models.Model):
                      'res_model': 'sale.order',
                      'activity_type_id': 4,
                      'summary': 'Form 4 Is Done',
-                     'note':  'Sale Order ' + self.name + 'has been confirmed',
+                     'note':  'Sale Order ' + self.name + ' has been confirmed',
                      'date_deadline': fields.Date.today() + timedelta(days=1),
                      'activity_category': 'default',
                      'previous_activity_type_id': False,
                      'recommended_activity_type_id': False,
                      'user_id': user_id.id
                      })
+
+    def action_approve_gm_discount(self):
+        for line in self.order_line:
+            if line.discount > 0.0:
+                gm_discount = float(self.env['ir.config_parameter'].get_param('gm_discount'))
+                if line.discount > gm_discount:
+                    self.state = 'ceo_discount'
+                    self.notifi_state = 'Sale Order ' + self.name + ' needs CEO discount Approval'
+                    ceo_id = self.env.ref('first_grain_custom.group_ceo').id
+                    user_ids = self.env['res.users'].search([('groups_id', 'in', [ceo_id])])
+                    if user_ids:
+                        for user_id in user_ids:
+                            activity_ins = self.env['mail.activity'].sudo().create(
+                                {'res_id': self.id,
+                                 'res_model_id': self.env['ir.model'].search([('model', '=', 'sale.order')],
+                                                                             limit=1).id,
+                                 'res_model': 'sale.order',
+                                 'activity_type_id': 4,
+                                 'summary': 'Form 4 Is Done',
+                                 'note': 'Sale Order ' + self.name + ' needs CEO discount Approval',
+                                 'date_deadline': fields.Date.today() + timedelta(days=1),
+                                 'activity_category': 'default',
+                                 'previous_activity_type_id': False,
+                                 'recommended_activity_type_id': False,
+                                 'user_id': user_id.id
+                                 })
+                else :
+                    self.state = self.last_state
+                    self.notifi_state = 'Sale Order ' + self.name + 'discount Approved'
+                    user_ids = [self.user_id.id]
+                    if user_ids:
+                        for user_id in user_ids:
+                            activity_ins = self.env['mail.activity'].sudo().create(
+                                {'res_id': self.id,
+                                 'res_model_id': self.env['ir.model'].search([('model', '=', 'sale.order')],
+                                                                             limit=1).id,
+                                 'res_model': 'sale.order',
+                                 'activity_type_id': 4,
+                                 'summary': 'Form 4 Is Done',
+                                 'note': 'Sale Order ' + self.name + ' discount Approved',
+                                 'date_deadline': fields.Date.today() + timedelta(days=1),
+                                 'activity_category': 'default',
+                                 'previous_activity_type_id': False,
+                                 'recommended_activity_type_id': False,
+                                 'user_id': user_id.id
+                                 })
+
+    def action_approve_ceo_discount(self):
+        self.state = self.last_state
+        self.notifi_state = 'Sale Order ' + self.name + ' discount Approved'
+        user_ids = [self.user_id]
+        if user_ids:
+            for user_id in user_ids:
+                activity_ins = self.env['mail.activity'].sudo().create(
+                                {'res_id': self.id,
+                                 'res_model_id': self.env['ir.model'].search([('model', '=', 'sale.order')],
+                                                                             limit=1).id,
+                                 'res_model': 'sale.order',
+                                 'activity_type_id': 4,
+                                 'summary': 'Form 4 Is Done',
+                                 'note': 'Sale Order ' + self.name + ' discount Approved',
+                                 'date_deadline': fields.Date.today() + timedelta(days=1),
+                                 'activity_category': 'default',
+                                 'previous_activity_type_id': False,
+                                 'recommended_activity_type_id': False,
+                                 'user_id': user_id.id
+                                 })
+
+
+    @api.model
+    def create(self,vals):
+        res = super(SaleOrder,self).create(vals)
+        for line in res.order_line:
+            if line.discount > 0.0:
+                if self.env.user.has_group('sales_team.group_sale_salesman') or self.env.user.has_group('sales_team.group_sale_salesman_all_leads') or self.env.user.has_group('sales_team.group_sale_manager') :
+                    sales_discount = float(self.env['ir.config_parameter'].get_param('sales_person_discount'))
+                    if line.discount > sales_discount:
+                        self.last_state = res.state
+                        res.write({'last_state':res.state,'state':'gm_discount','notifi_state': 'Sale Order ' + res.name + 'needs GM discount Approval'})
+                        gm_id = self.env.ref('first_grain_custom.group_gm').id
+                        user_ids = self.env['res.users'].search([('groups_id', 'in', [gm_id])])
+                        if user_ids:
+                            for user_id in user_ids:
+                                activity_ins = self.env['mail.activity'].sudo().create(
+                                    {'res_id': res.id,
+                                     'res_model_id': self.env['ir.model'].search([('model', '=', 'sale.order')],
+                                                                                 limit=1).id,
+                                     'res_model': 'sale.order',
+                                     'activity_type_id': 4,
+                                     'summary': 'Form 4 Is Done',
+                                     'note': 'Sale Order ' + res.name + ' needs GM discount Approval',
+                                     'date_deadline': fields.Date.today() + timedelta(days=1),
+                                     'activity_category': 'default',
+                                     'previous_activity_type_id': False,
+                                     'recommended_activity_type_id': False,
+                                     'user_id': user_id.id
+                                     })
+
+                    #send notification to General Manager
+        return res
+
+
+
+

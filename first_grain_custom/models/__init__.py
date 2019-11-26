@@ -9,3 +9,4 @@ from . import bill_leading
 from . import stock_picking
 from . import sale_order_type
 from . import delivery_order_type
+from . import sale_config

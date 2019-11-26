@@ -21,6 +21,12 @@
                 <xpath expr="//field[@name='payment_term_id']" position="after">
                         <field name="delivery_method"/>
                 </xpath>
+                <xpath expr="//button[@name='action_confirm']" position="after">
+                    <button name="action_approve_gm_discount" type='object' string="GM Discount approve" states="gm_discount" groups="first_grain_custom.group_gm">
+                    </button>
+                    <button name="action_approve_ceo_discount" type='object' string="CEO Discount approve" states="ceo_discount" groups="first_grain_custom.group_ceo">
+                    </button>
+                </xpath>
             </field>
         </record>
 </odoo>

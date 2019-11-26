@@ -9,6 +9,8 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     state = fields.Selection([
+        ('gm_discount', 'GM Discount approve'),
+        ('ceo_discount', 'CEO Discount approve'),
         ('draft', 'Quotation'),
         ('sent', 'Quotation Sent'),
         ('approve_credit_limit','Approve Credit Limit'),

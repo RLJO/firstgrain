@@ -32,4 +32,13 @@
         <field name="category_id" ref="base.module_category_usability"/>
         <field name="name">Operation Manager</field>
     </record>
+
+     <record id ="group_ar" model="res.groups" ><!--- name of the group -->
+        <field name="category_id" ref="base.module_category_usability"/>
+        <field name="name">A/R</field>
+     </record>
+     <record id ="group_ap" model="res.groups" ><!--- name of the group -->
+        <field name="category_id" ref="base.module_category_usability"/>
+        <field name="name">A/P</field>
+     </record>
 </odoo>

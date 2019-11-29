@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <odoo>
+
+     <record model="ir.ui.view" id="view_account_move_kanban_inheit">
+                <field name="name">invoice_kanban</field>
+                <field name="model">account.move</field>
+                <field name="inherit_id" ref="account.view_account_move_kanban"/>
+                <field name="arch" type="xml">
+                        <xpath expr="//templates/t/div" position="inside">
+                                <div class="row">
+                                    <div class="col-12">
+                                      <field name="notifi_state"/>
+                                    </div>
+                                </div>
+                        </xpath>
+                </field>
+        </record>
 
     <record id="account_view_move_form_firstgrain" model="ir.ui.view">
             <field name="name">account.invoice.firstgrain</field>

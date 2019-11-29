@@ -8,6 +8,8 @@ class SaleOrder(models.Model):
 
     notifi_state = fields.Char()
     delivery_method = fields.Selection([('direct_bulk','Direct Bulk'),('direct_packed','Direct Packed'),('indirect_bulk','Indirect Bulk'),('indirect_packed','Indirect Packed')],'Delivery method')
+    operation_id = fields.Many2one('operation.logistic','Operation')
+    policy_id = fields.Many2one('bill.leading' , 'Policy')
 
     last_state = fields.Char()
     def action_confirm(self):
@@ -32,7 +34,7 @@ class SaleOrder(models.Model):
                      'activity_type_id': 4,
                      'summary': 'Form 4 Is Done',
                      'note':  'Sale Order ' + self.name + ' has been confirmed',
-                     'date_deadline': fields.Date.today() + timedelta(days=1),
+                     'date_deadline': fields.Date.today() ,
                      'activity_category': 'default',
                      'previous_activity_type_id': False,
                      'recommended_activity_type_id': False,
@@ -58,7 +60,7 @@ class SaleOrder(models.Model):
                                  'activity_type_id': 4,
                                  'summary': 'Form 4 Is Done',
                                  'note': 'Sale Order ' + self.name + ' needs CEO discount Approval',
-                                 'date_deadline': fields.Date.today() + timedelta(days=1),
+                                 'date_deadline': fields.Date.today() ,
                                  'activity_category': 'default',
                                  'previous_activity_type_id': False,
                                  'recommended_activity_type_id': False,
@@ -67,7 +69,7 @@ class SaleOrder(models.Model):
                 else :
                     self.state = self.last_state
                     self.notifi_state = 'Sale Order ' + self.name + 'discount Approved'
-                    user_ids = [self.user_id.id]
+                    user_ids = [self.user_id]
                     if user_ids:
                         for user_id in user_ids:
                             activity_ins = self.env['mail.activity'].sudo().create(
@@ -78,7 +80,7 @@ class SaleOrder(models.Model):
                                  'activity_type_id': 4,
                                  'summary': 'Form 4 Is Done',
                                  'note': 'Sale Order ' + self.name + ' discount Approved',
-                                 'date_deadline': fields.Date.today() + timedelta(days=1),
+                                 'date_deadline': fields.Date.today() ,
                                  'activity_category': 'default',
                                  'previous_activity_type_id': False,
                                  'recommended_activity_type_id': False,
@@ -99,7 +101,7 @@ class SaleOrder(models.Model):
                                  'activity_type_id': 4,
                                  'summary': 'Form 4 Is Done',
                                  'note': 'Sale Order ' + self.name + ' discount Approved',
-                                 'date_deadline': fields.Date.today() + timedelta(days=1),
+                                 'date_deadline': fields.Date.today() ,
                                  'activity_category': 'default',
                                  'previous_activity_type_id': False,
                                  'recommended_activity_type_id': False,
@@ -129,7 +131,7 @@ class SaleOrder(models.Model):
                                      'activity_type_id': 4,
                                      'summary': 'Form 4 Is Done',
                                      'note': 'Sale Order ' + res.name + ' needs GM discount Approval',
-                                     'date_deadline': fields.Date.today() + timedelta(days=1),
+                                     'date_deadline': fields.Date.today() ,
                                      'activity_category': 'default',
                                      'previous_activity_type_id': False,
                                      'recommended_activity_type_id': False,

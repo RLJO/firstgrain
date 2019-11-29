@@ -27,5 +27,7 @@
         'views/stock_picking_view.xml',
         'views/bill_leading_view.xml',
         'views/sale_config.xml',
+        'views/purchase_order_view.xml',
+        'views/customer_payment_view.xml',
     ],
 }

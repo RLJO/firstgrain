@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+
+    <record model="ir.ui.view" id="stock_stock_picking_kanban_inherit">
+                <field name="name">picking_kanban</field>
+                <field name="model">stock.picking</field>
+                <field name="inherit_id" ref="stock.stock_picking_kanban"/>
+                <field name="arch" type="xml">
+                        <xpath expr="//templates/t/div" position="inside">
+                                <div class="row">
+                                    <div class="col-12">
+                                      <field name="notifi_state"/>
+                                    </div>
+                                </div>
+                        </xpath>
+                </field>
+        </record>
+
+
         <record id="stock_view_picking_form_inherit" model="ir.ui.view">
             <field name="name">First Grain form view</field>
             <field name="model">stock.picking</field>
@@ -13,6 +30,19 @@
                                 <field name="bill_leading_id"/>
                             </group>
                         </group>
+
+                    </page>
+                    <page name="vehicle_information" string="Vehicle Information">
+                        <field name="vehicle_line">
+                            <tree editable="bottom">
+                                <field name="driver_name"/>
+                                <field name="car_number"/>
+                                <field name="car_type"/>
+                                <field name="destination"/>
+                                <field name="qty"/>
+
+                            </tree>
+                        </field>
 
                     </page>
 

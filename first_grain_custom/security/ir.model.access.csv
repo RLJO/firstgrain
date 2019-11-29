@@ -6,3 +6,4 @@ operation_log_access_full,operation_log_access_full,model_operation_log,base.gro
 bill_leading_access_full,bill_leading_access_full,model_bill_leading,base.group_user,1,1,1,1
 sale_order_type_access_full,sale_order_type_access_full,model_sale_order_type,base.group_user,1,1,1,1
 delivery_order_type_access_full,delivery_order_type_access_full,model_delivery_order_type,base.group_user,1,1,1,1
+vehicle_info_access_full,vehicle_info_access_full,model_vehicle_info_line,base.group_user,1,1,1,1

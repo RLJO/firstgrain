@@ -10,3 +10,6 @@ from . import stock_picking
 from . import sale_order_type
 from . import delivery_order_type
 from . import sale_config
+from . import purchase_order
+from . import customer_payment
+from . import vehicle_info

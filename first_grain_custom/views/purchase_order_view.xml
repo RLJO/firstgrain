@@ -10,6 +10,7 @@
                 <xpath expr="//field[@name='currency_id']" position="after">
                     <field name="limit_up_to"/>
                     <field name="premium_from"/>
+                    <field name="purchase_type"/>
                 </xpath>
 
             </field>

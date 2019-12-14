@@ -110,8 +110,8 @@ class BillLeading(models.Model):
         self.env['account.analytic.account'].create({'name':self.name})
         # create Operation 
         self.env['operation.logistic'].create({
-            'name':self.name,
-            'contract_no':self.name,
+            'name':self.name +' Operation',
+            'contract_no':self.id,
             'purchase_id':self.source_document_rfq.id,
         })
         # send notification or operation create

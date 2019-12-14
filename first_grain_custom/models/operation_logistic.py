@@ -14,7 +14,7 @@ class Operation(models.Model):
     arrived_date = fields.Date('Date Arrived')
 
     # First Tab
-    form4 = fields.Boolean('Form 4' )
+    # form4 = fields.Boolean('Form 4' )
 
     form4_attachment = fields.Binary(attachment=True)
 
@@ -61,7 +61,7 @@ class Operation(models.Model):
     notification_status = fields.Char()
     show_review = fields.Boolean(default=False)
 
-    state = fields.Selection([('new', 'New'), ('request_review', 'Wait PO Review'),('request_gm_ceo','Wait GM - CEO Approve'),('approved','Approved')], default='new', string="State", index=True)
+    state = fields.Selection([('new', 'New'),('prepare','Prepare'), ('request_review', 'Wait PO Review'),('request_gm_ceo','Wait GM - CEO Approve'),('approved','Approved')], default='new', string="State", index=True)
     log_line_ids = fields.One2many('operation.log','operation_id')
 
     bill_no = fields.Many2one('bill.leading','Bill No ')
@@ -255,7 +255,39 @@ class Operation(models.Model):
                      'recommended_activity_type_id': False,
                      'user_id': user_id.id
                      })
-        
+
+    def action_prepare(self):
+        self.state = 'prepare'
+        # Create Form 4
+
+        form_vals = {
+            'name':self.name +' Form 4',
+            'operation_id':self.id,
+        }
+        form4 = self.env['form.form'].create(form_vals)
+        self.form4 = form4.id
+        # Send notification
+
+        account_manager_id = self.env.ref('account.group_account_manager').id
+        user_ids = self.env['res.users'].search([('groups_id', 'in', [account_manager_id])])
+        if user_ids:
+            form4.notification_status = 'Form 4 ' + self.name + ' created and needs preparing'
+            for user_id in user_ids:
+                activity_ins = self.env['mail.activity'].sudo().create(
+                    {'res_id': form4.id,
+                     'res_model_id': self.env['ir.model'].search([('model', '=', 'form.form')], limit=1).id,
+                     'res_model': 'form.form',
+                     'activity_type_id': 6,
+                     'summary': 'Form Prepare',
+                     'note': 'Form 4 ' + self.name + '  created and needs preparing',
+                     'date_deadline': fields.Date.today(),
+                     'activity_category': 'default',
+                     'previous_activity_type_id': False,
+                     'recommended_activity_type_id': False,
+                     'user_id': user_id.id
+                     })
+
+
     def write(self,vals):
         operation = super(Operation, self).write(vals)
         if vals.get('log_line_ids'):
@@ -283,3 +315,21 @@ class Operation(models.Model):
 
         return operation
 
+    #  Form 4 Data
+    form4 = fields.Many2one('form.form','Form 4')
+    issue_date = fields.Date('Issue Date' ,related='form4.issue_date')
+    bank_name = fields.Char('Bank Name',related='form4.bank_name')
+    exporter_name = fields.Char('Exporter name',related='form4.exporter_name')
+    address = fields.Char('Address',related='form4.address')
+    id = fields.Integer('ID',related='form4.id')
+    product_id = fields.Many2one('product.template', string='Product Name',related='form4.product_id')
+    qty = fields.Integer('QTY',related='form4.qty')
+    unit_price = fields.Float('Price Unit',related='form4.unit_price')
+    contract_info = fields.Char('أساس التعاقد',related='form4.contract_info')
+
+    organ = fields.Char('Organ',related='form4.organ')
+    product_form = fields.Char('Product Form',related='form4.product_form')
+    source_doc = fields.Char('Source Document',related='form4.source_doc')
+    bank_fees = fields.Float('Bank Fees',related='form4.bank_fees')
+    pay_bank_fees = fields.Float('Pay Bank Fees Issue',related='form4.pay_bank_fees')
+    attachment_doc = fields.Binary(related='form4.attachment_doc')

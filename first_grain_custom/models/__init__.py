@@ -13,3 +13,4 @@ from . import sale_config
 from . import purchase_order
 from . import customer_payment
 from . import vehicle_info
+from . import form4

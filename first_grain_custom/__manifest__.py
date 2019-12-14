@@ -29,5 +29,6 @@
         'views/sale_config.xml',
         'views/purchase_order_view.xml',
         'views/customer_payment_view.xml',
+        'views/form4_view.xml',
     ],
 }

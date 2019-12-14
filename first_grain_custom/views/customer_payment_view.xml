@@ -7,10 +7,33 @@
             <field name="inherit_id" ref="account.view_account_payment_form"/>
             <field name="arch" type="xml">
 
+                <xpath expr="//header" position="inside">
+                    <button name="action_request_approval" string="Request Approval" groups="first_grain_custom.group_ap" states="draft" type="object"/>
+                    <button name="action_approve" string="Approve" type="object" states="request_approval" groups="first_grain_custom.group_gm,first_grain_custom.group_ceo"/>
+                    <button name="action_reject" string="Reject" type="object" states="request_approval" groups="first_grain_custom.group_gm,first_grain_custom.group_ceo"/>
+
+                </xpath>
+                <xpath expr="//button[@name='post']" position="attributes">
+                    <attribute name="states">gm_ceo_approval</attribute>
+                </xpath>
+
                 <xpath expr="//field[@name='company_id']" position="after">
                     <field name="analytic_account_id"/>
                 </xpath>
 
             </field>
+        </record>
+
+         <record model="ir.ui.view" id="vendor_payment_kanban inherit">
+                <field name="name">vendor_payment_kanban</field>
+                <field name="model">account.payment</field>
+                <field name="inherit_id" ref="account.view_account_payment_kanban"/>
+                <field name="arch" type="xml">
+                        <xpath expr="//div[1]" position="inside">
+                                <div class="oe_kanban_bottom_left .text-info">
+                                      <field name="notifi_status"/>
+                                </div>
+                        </xpath>
+                </field>
         </record>
 </odoo>

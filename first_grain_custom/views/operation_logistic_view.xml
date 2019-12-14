@@ -21,6 +21,7 @@
             <form>
                 <header>
                     <button string="Request PO Review" type="object" states="new" name="action_request_approval_pom" class="oe_highlight" groups="first_grain_custom.group_operation_l_manager"/>
+                    <button string="Start" name="action_prepare" groups="first_grain_custom.group_operation_l_manager" states="new" type="object" />
                     <button string="Approve" type="object" states="request_review" name="action_approve_pom" class="oe_highlight" groups="purchase.group_purchase_manager"/>
                     <button string="Approve" type="object" states="request_gm_ceo" name="action_approve_gm_ceo" class="oe_highlight" groups="first_grain_custom.group_gm,first_grain_custom.group_ceo"/>
                     <field name="state" widget="statusbar" />
@@ -45,13 +46,33 @@
                     <notebook>
                         <page name="form4" string="Form 4">
                             <group>
-                                <group>
-                                    <field name="form4"/>
-                                </group>
-                                <group>
-                                    <field name="form4_attachment"/>
-                                    <field name="show_review" invisible="1"/>
-                                </group>
+                                    <group>
+                                        <field name="form4"/>
+                                        <field name="issue_date"/>
+                                        <field name="bank_name"/>
+                                        <field name="exporter_name"/>
+                                    </group>
+                                    <group>
+                                        <field name="address"/>
+                                        <field name="id"/>
+                                        <field name="product_id"/>
+                                        <field name="qty"/>
+                                    </group>
+                                    <group>
+                                        <field name="unit_price"/>
+                                        <field name="contract_info"/>
+                                        <field name="organ"/>
+                                        <field name="product_form"/>
+                                    </group>
+                                    <group>
+                                        <field name="source_doc"/>
+                                        <field name="bank_fees"/>
+                                        <field name="pay_bank_fees"/>
+                                        <field name="attachment_doc"/>
+                                        <field name="show_review" invisible="1"/>
+
+                                    </group>
+
 
                                 <button name="action_ask_for_form4" string="Request form 4" type="object"></button>
                                 <button name="action_done_form4" string="Done" type="object" groups="account.group_account_manager"></button>

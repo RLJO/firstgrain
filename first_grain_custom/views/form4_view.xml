@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="form4_form_view_tree" model="ir.ui.view">
+        <field name="name">form4.tree</field>
+        <field name="model">form.form</field>
+        <field name="arch" type="xml">
+            <tree string="Form 4">
+                <field name="name" />
+                <field name="operation_id"/>
+                <field name="issue_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="form4_view_form" model="ir.ui.view">
+        <field name="name">form4.from</field>
+        <field name="model">form.form</field>
+        <field name="arch" type="xml">
+            <form>
+                 <header>
+                    <button string="Start" type="object" states="new" groups="account.group_account_manager" name="action_form_prepare" class="oe_highlight"/>
+                    <button string="Done" type="object" states="prepare" groups="account.group_account_manager" name="action_form_done" class="oe_highlight"/>
+
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <label class="col-form-label" for="name">Number</label>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="operation_id"/>
+                            <field name="issue_date"/>
+                            <field name="bank_name"/>
+                            <field name="exporter_name"/>
+                        </group>
+                        <group>
+                            <field name="address"/>
+                            <field name="id"/>
+                            <field name="product_id"/>
+                            <field name="qty"/>
+                        </group>
+                        <group>
+                            <field name="unit_price"/>
+                            <field name="contract_info"/>
+                            <field name="organ"/>
+                            <field name="product_form"/>
+                        </group>
+                        <group>
+                            <field name="source_doc"/>
+                            <field name="bank_fees"/>
+                            <field name="pay_bank_fees"/>
+                            <field name="attachment_doc"/>
+                        </group>
+
+                    </group>
+<!--                    <notebook>-->
+<!--                        <page name="form4" string="Form 4">-->
+
+<!--                        </page>-->
+<!--                    </notebook>-->
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="form4_kanban_view_form" model="ir.ui.view">
+            <field name="name">form4.kanban</field>
+            <field name="model">form.form</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div>
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div>
+                                    <span><field name="notification_status"/>&amp;nbsp;</span>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+    </record>
+
+
+    <record id="form4_action_main" model="ir.actions.act_window">
+        <field name="name">Form 4</field>
+        <field name="res_model">form.form</field>
+        <field name="view_mode">tree,form,kanban</field>
+<!--        <field name="search_view_id" ref="user_partner_discount_view_search"/>-->
+    </record>
+
+    <menuitem name="Form 4"
+              id="form4_menu_first"
+              groups="base.group_user"
+              sequence="8"
+              action="form4_action_main"
+              />
+
+    <menuitem name="Form 4"
+              id="form4_menu_second"
+              action="form4_action_main"
+              groups="base.group_user"
+              sequence="1"
+              parent="form4_menu_first"
+              />
+
+</odoo>

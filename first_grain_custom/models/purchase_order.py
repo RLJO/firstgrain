@@ -10,6 +10,19 @@ class PurchaseOrder(models.Model):
     premium_from = fields.Float('Premium Form')
     purchase_type = fields.Selection([('local','Local Purchase'),('semi_local','Semi Local Purchase'),('international','International Purchase'),('semi_international','Semi International Purchase')] , string="Purchase Type")
 
+    shipment_from = fields.Datetime('Shipment Period From')
+    shipment_to = fields.Datetime('Shipment Period To')
+
+    notification_status = fields.Char()
+
+    is_account_advisor = fields.Boolean(compute='_is_account_advisor')
+
+    def _is_account_advisor(self):
+        self.is_account_advisor = self.env.user.has_group('account.group_account_manager')
+
+
+
+
     def button_confirm(self):
         res = super(PurchaseOrder,self).button_confirm()
         if res :
@@ -23,3 +36,23 @@ class PurchaseOrder(models.Model):
 
             contract = self.env['contract.form'].create(contract_vals)
         return res
+
+    def action_request_payment_term(self):
+        account_manager_id = self.env.ref('account.group_account_manager').id
+        user_ids = self.env['res.users'].search([('groups_id', 'in', [account_manager_id])])
+        if user_ids:
+            self.notification_status = 'Payment Requested for ' + self.name
+            for user_id in user_ids:
+                activity_ins = self.env['mail.activity'].sudo().create(
+                    {'res_id': self.id,
+                     'res_model_id': self.env['ir.model'].search([('model', '=', 'purchase.order')], limit=1).id,
+                     'res_model': 'purchase.order',
+                     'activity_type_id': 6,
+                     'summary': 'Payment Term request',
+                     'note': 'Payment Requested for ' + self.name ,
+                     'date_deadline': fields.Date.today(),
+                     'activity_category': 'default',
+                     'previous_activity_type_id': False,
+                     'recommended_activity_type_id': False,
+                     'user_id': user_id.id
+                     })

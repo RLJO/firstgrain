@@ -19,7 +19,7 @@
         <field name="arch" type="xml">
             <form>
                  <header>
-                    <button string="Start" type="object" states="new" groups="account.group_account_manager" name="action_form_prepare" class="oe_highlight"/>
+                    <button string="Start" type="object" states="draft" groups="account.group_account_manager" name="action_form_prepare" class="oe_highlight"/>
                     <button string="Done" type="object" states="prepare" groups="account.group_account_manager" name="action_form_done" class="oe_highlight"/>
 
                     <field name="state" widget="statusbar" />

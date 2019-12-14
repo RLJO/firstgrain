@@ -20,7 +20,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button string="Request PO Review" type="object" states="new" name="action_request_approval_pom" class="oe_highlight" groups="first_grain_custom.group_operation_l_manager"/>
+                    <button string="Request PO Review" type="object" states="new,prepare" name="action_request_approval_pom" class="oe_highlight" groups="first_grain_custom.group_operation_l_manager"/>
                     <button string="Start" name="action_prepare" groups="first_grain_custom.group_operation_l_manager" states="new" type="object" />
                     <button string="Approve" type="object" states="request_review" name="action_approve_pom" class="oe_highlight" groups="purchase.group_purchase_manager"/>
                     <button string="Approve" type="object" states="request_gm_ceo" name="action_approve_gm_ceo" class="oe_highlight" groups="first_grain_custom.group_gm,first_grain_custom.group_ceo"/>

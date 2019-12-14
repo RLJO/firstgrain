@@ -12,7 +12,35 @@
                     <field name="premium_from"/>
                     <field name="purchase_type"/>
                 </xpath>
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="shipment_from"/>
+                    <field name="shipment_to"/>
+                    <field name="is_account_advisor" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//button[@name='button_confirm']" position="after">
+                    <button name="action_request_payment_term" string="Request Payment Term" type="object" groups="account.group_account_manager" />
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('is_account_advisor', '=', False)]}</attribute>
+                </xpath>
 
             </field>
         </record>
+
+        <record model="ir.ui.view" id="inherit_view_purchase_order_kanban">
+                <field name="name">purchase_order</field>
+                <field name="model">purchase.order</field>
+                <field name="inherit_id" ref="purchase.view_purchase_order_kanban"/>
+                <field name="arch" type="xml">
+                        <xpath expr="//templates/t/div" position="inside">
+                                <div class="row">
+                                    <div class="col-12">
+                                      <field name="notification_status"/>
+                                    </div>
+                                </div>
+                        </xpath>
+                </field>
+        </record>
+
 </odoo>

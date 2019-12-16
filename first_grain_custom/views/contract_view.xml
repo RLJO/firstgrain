@@ -53,6 +53,7 @@
                                             <field name="c_zip" placeholder="ZIP" class="o_address_zip"/>
                                             <field name="c_country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
                                         </div>
+                            <field name="commodity"/>
                             <field name="quantity"/>
                             <field name="quantity_note"/>
                             <field name="quality"/>

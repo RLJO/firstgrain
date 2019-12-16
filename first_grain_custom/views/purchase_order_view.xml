@@ -6,11 +6,22 @@
             <field name="model">purchase.order</field>
             <field name="inherit_id" ref="purchase.purchase_order_form"/>
             <field name="arch" type="xml">
+<!--                Contract smart button -->
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button type="object"  name="action_view_contract"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o" attrs="{'invisible':[('contract_count', '=', 0)]}">
+                            <field name="contract_count" widget="statinfo" string="Contracts"/>
+                    </button>
+
+                </xpath>
 
                 <xpath expr="//field[@name='currency_id']" position="after">
                     <field name="limit_up_to"/>
                     <field name="premium_from"/>
                     <field name="purchase_type"/>
+                    <field name="monthly_plan"/>
+                    <field name="price_method" attrs="{'invisible': [('state', '=', 'cbot_approval')]}"/>
                 </xpath>
                 <xpath expr="//field[@name='company_id']" position="after">
                     <field name="shipment_from"/>
@@ -18,11 +29,48 @@
                     <field name="is_account_advisor" invisible="1"/>
                 </xpath>
 
-                <xpath expr="//button[@name='button_confirm']" position="after">
-                    <button name="action_request_payment_term" string="Request Payment Term" type="object" groups="account.group_account_manager" />
+                <!-- hide buttons in for  -->
+
+                 <xpath expr="//button[@name='button_confirm']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('purchase_type', '!=', 'other')]}</attribute>
+                 </xpath>
+
+                <xpath expr="//button[@name='button_confirm'][2]" position="replace">
                 </xpath>
+
+                <xpath expr="//button[@name='action_rfq_send']" position="replace">
+                    <button name="action_rfq_send" states="draft" string="Send by Email" attrs="{'invisible': [('purchase_type', '!=', 'other')]}" type="object" context="{'send_rfq':True}" class="oe_highlight"/>
+                </xpath>
+
+<!--                 local , international type -->
+                <xpath expr="//button[@name='button_confirm']" position="after">
+                    <button name="action_request_payment_term" string="Request Payment Term" type="object"  attrs="{'invisible': ['|',('state','not in',['draft']),('purchase_type', 'not in', ['local','semi_local','international','semi_international'])]}" />
+                    <button name="action_payment_term_approve" string="Approve" type="object" groups="account.group_account_manager" attrs="{'invisible': ['|',('state','not in',['payment_term_request']),('purchase_type', 'not in', ['local','semi_local','international','semi_international'])]}" />
+                    <button name="action_rfq_send" string="Send by Email" type="object" context="{'send_rfq':True}" class="oe_highlight" attrs="{'invisible': ['|',('state','not in',['sent']),('purchase_type','not in', ['local','semi_local','international','semi_international'])]}" />
+                    <button name="action_request_cbot_approve" string="Request CBOT Approve" type="object" attrs="{'invisible': ['|',('state','not in',['bid_received']),('purchase_type','not in', ['local','semi_local','international','semi_international'])]}" />
+                    <button name="action_cbot_approve" string="Approve" type="object" groups="first_grain_custom.group_cbot_manager" attrs="{'invisible': ['|',('state','not in',['cbot_approval']),('purchase_type', 'not in', ['local','semi_local','international','semi_international'])]}" />
+                    <button name="action_gm_approve" string="Approve" type="object" groups="first_grain_custom.group_gm" attrs="{'invisible': ['|',('state','not in',['gm_approval']),('purchase_type', 'not in', ['local','semi_local','international','semi_international'])]}" />
+                    <button name="action_gm_reject" string="Reject" type="object" groups="first_grain_custom.group_gm" attrs="{'invisible': ['|',('state','not in',['gm_approval']),('purchase_type', 'not in', ['local','semi_local','international','semi_international'])]}" />
+                    <button name="action_ceo_approve" string="Approve" type="object" groups="first_grain_custom.group_ceo" attrs="{'invisible': ['|',('state','not in',['ceo_approval']),('purchase_type', 'not in', ['local','semi_local','international','semi_international'])]}" />
+                    <button name="action_ceo_reject" string="Reject" type="object" groups="first_grain_custom.group_ceo" attrs="{'invisible': ['|',('state','not in',['ceo_approval']),('purchase_type', 'not in', ['local','semi_local','international','semi_international'])]}" />
+                    <button name="action_create_contract" string="Create Contract" type="object" groups="purchase.group_purchase_manager" attrs="{'invisible': ['|',('state','not in',['issue_contract']),('purchase_type','not in', ['local','semi_local','international','semi_international'])]}" />
+
+                </xpath>
+
+                <!--payment term Editable for  account Advisor-->
                 <xpath expr="//field[@name='payment_term_id']" position="attributes">
                     <attribute name="attrs">{'readonly': [('is_account_advisor', '=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+                    <field name="origin" />
+                    <field name="price_method" invisible="1"/>
+
+                    <field name="premium_price" attrs="{'invisible': [('price_method', '!=', 'premium')]}" />
+                    <field name="cbot_price" attrs="{'invisible': [('price_method', '!=', 'premium')]}" />
+                    <field name="limit_up" attrs="{'invisible': [('price_method', '!=', 'premium')]}" />
+                    <field name="cbot_month" attrs="{'invisible': [('price_method', '!=', 'premium')]}" />
+                    <field name="pricing_phase" attrs="{'invisible': [('price_method', '!=', 'premium')]}" />
                 </xpath>
 
             </field>

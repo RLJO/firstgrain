@@ -35,7 +35,7 @@ class BillLeading(models.Model):
     quality = fields.Char('Quality')
     delivery_term = fields.Char('Delivery Terms')
     shipment_period = fields.Char('Shipment Period')
-    price = fields.Char('Price')
+    price = fields.Float('Price')
     prov_price = fields.Char('prov_price')
 
     payment_term = fields.Many2one('account.payment.term',related='source_document_rfq.payment_term_id')
@@ -54,6 +54,8 @@ class BillLeading(models.Model):
     limit_liability = fields.Char('Limitation of Liability')
     terms_conds_rule = fields.Char('Terms, Conditions and Rules')
     language = fields.Char('Language')
+
+    commodity = fields.Many2one('product.product')
 
     state = fields.Selection([('new', 'New'), ('request_approval', 'Request Approval'),('Wait_ceo_confirm','Wait CEO Confirm'),('confirmed','Confirmed')], default='new', string="State", index=True)
     notification_status = fields.Char()
@@ -109,7 +111,7 @@ class BillLeading(models.Model):
         # create Analytic Account
         self.env['account.analytic.account'].create({'name':self.name})
         # create Operation 
-        self.env['operation.logistic'].create({
+        operation =self.env['operation.logistic'].create({
             'name':self.name +' Operation',
             'contract_no':self.id,
             'purchase_id':self.source_document_rfq.id,
@@ -119,15 +121,15 @@ class BillLeading(models.Model):
         account_manager_id = self.env.ref('account.group_account_manager').id
         user_ids = self.env['res.users'].search([('groups_id', 'in', [gm_id, account_manager_id])])
         if user_ids:
-            self.notification_status = 'Operation ' + self.name + 'has been created'
+            operation.notification_status = 'Operation ' + operation.name + 'has been created'
             for user_id in user_ids:
                 activity_ins = self.env['mail.activity'].sudo().create(
-                    {'res_id': self.id,
+                    {'res_id': operation.id,
                      'res_model_id': self.env['ir.model'].search([('model', '=', 'operation.logistic')], limit=1).id,
                      'res_model': 'operation.logistic',
                      'activity_type_id': 6,
                      'summary': 'Operation Created',
-                     'note': 'Operation ' + self.name + 'has been created',
+                     'note': 'Operation ' + operation.name + 'has been created',
                      'date_deadline': fields.Date.today(),
                      'activity_category': 'default',
                      'previous_activity_type_id': False,
@@ -157,5 +159,6 @@ class BillLeading(models.Model):
                              })
 
         # confirm purchase order
+        self.source_document_rfq.state = 'draft'
         self.source_document_rfq.button_confirm()
 

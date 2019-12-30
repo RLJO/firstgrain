@@ -41,6 +41,25 @@ class SaleOrder(models.Model):
                      'user_id': user_id.id
                      })
 
+        # Delivery Order Data
+        for move in self.picking_ids:
+            move.update({'operation_id':self.operation_id.id,
+                         'policy_id':self.policy_id.id})
+
+        # Update line in bill of leading
+        if self.policy_id:
+            for line in self.order_line:
+                qty = line.product_uom_qty
+            sale_order_line ={
+                'sale_order_id':self.id,
+                'customer_id':self.partner_id.id,
+                'qty':qty,
+                'bill_leading_id': self.policy_id.id,
+
+            }
+            self.env['sale.order.type'].create(sale_order_line)
+
+
     def action_approve_gm_discount(self):
         for line in self.order_line:
             if line.discount > 0.0:

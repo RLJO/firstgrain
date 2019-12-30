@@ -14,7 +14,7 @@
 
     'category': 'Uncategorized',
     'version': '0.1',
-    'depends':['sale','account_budget','account','purchase','gamification','mail','stock'],
+    'depends':['sale','account_budget','account','purchase','gamification','mail','stock','sale_stock'],
     'data': [
         'security/ir.model.access.csv',
         'security/groups.xml',
@@ -30,5 +30,6 @@
         'views/purchase_order_view.xml',
         'views/customer_payment_view.xml',
         'views/form4_view.xml',
+        'views/cbot_view.xml',
     ],
 }

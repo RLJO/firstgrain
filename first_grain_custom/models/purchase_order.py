@@ -175,6 +175,22 @@ class PurchaseOrderInherit(models.Model) :
                      'user_id': user_id.id
                      })
 
+        #Create cbot
+
+        for line_1 in self.order_line :
+            commodity = line_1.product_id.id
+            premium_price = line_1.premium_price
+            cbot = line_1.cbot_price
+        cbot_vals = {
+            'po_number': self.id,
+            'name': self.name + ' - CBOT',
+            'premium_date': self.date_order,
+            'commodity' :commodity,
+            'premium_price':premium_price,
+            'cbot' :cbot
+        }
+        cbot_obj = self.env['cbot.form'].create(cbot_vals)
+
     def action_cbot_approve(self):
         self.state = 'gm_approval'
         gm_manager = self.env.ref('first_grain_custom.group_gm').id

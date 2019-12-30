@@ -21,7 +21,7 @@
                     <field name="premium_from"/>
                     <field name="purchase_type"/>
                     <field name="monthly_plan"/>
-                    <field name="price_method" attrs="{'invisible': [('state', '=', 'cbot_approval')]}"/>
+                    <field name="price_method" attrs="{'invisible': [('state', '!=', 'cbot_approval')]}"/>
                 </xpath>
                 <xpath expr="//field[@name='company_id']" position="after">
                     <field name="shipment_from"/>

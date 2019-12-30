@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="cbot_view_tree" model="ir.ui.view">
+        <field name="name">cbot.tree</field>
+        <field name="model">cbot.form</field>
+        <field name="arch" type="xml">
+            <tree string="CBOT">
+                <field name="po_number" />
+                <field name="cbot" />
+                <field name="commodity"/>
+                <field name="premium_date"/>
+                <field name="premium_price"/>
+                <field name="protection" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="cbot_view_form" model="ir.ui.view">
+        <field name="name">cbot.form</field>
+        <field name="model">cbot.form</field>
+        <field name="arch" type="xml">
+            <form>
+                 <header>
+                    <button string="Update" type="object"  name="action_update_cbot" groups="first_grain_custom.group_cbot_manager" class="oe_highlight"/>
+<!--                    <button string="Approve" type="object" states="request_approval" name="action_approve" class="oe_highlight" groups="first_grain_custom.group_gm,account.group_account_manager"/>-->
+<!--                    <button string="Confirm" type="object" states="Wait_ceo_confirm" name="action_confirm" class="oe_read_only" groups="first_grain_custom.group_ceo"/>-->
+<!--                    <field name="state" widget="statusbar" />-->
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <label class="col-form-label" for="name">Number</label>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="po_number"/>
+                            <field name="commodity"/>
+                            <field name="premium_date"/>
+                            <field name="premium_price"/>
+                            <field name="cbot"/>
+                            <field name="protection"/>
+                        </group>
+                        <group>
+                            <field name="conversion_rate"  readonly="1"/>
+                            <field name="final_price" readonly="1"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+
+                    </notebook>
+                </sheet>
+<!--                <div class="oe_chatter">-->
+<!--                    <field name="message_follower_ids" widget="mail_followers"/>-->
+<!--                    <field name="activity_ids" widget="mail_activity"/>-->
+<!--                    <field name="message_ids" widget="mail_thread"/>-->
+<!--                </div>-->
+            </form>
+        </field>
+    </record>
+
+
+
+    <record id="cbot_action_main" model="ir.actions.act_window">
+        <field name="name">CBOT</field>
+        <field name="res_model">cbot.form</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <menuitem name="CBOT"
+              id="cbot_menu_first"
+              groups="base.group_user"
+              sequence="8"
+              action="cbot_action_main"
+              />
+
+    <menuitem name="CBOT"
+              id="cbot_menu_second"
+              action="cbot_action_main"
+              groups="base.group_user"
+              sequence="1"
+              parent="cbot_menu_first"
+              />
+
+</odoo>

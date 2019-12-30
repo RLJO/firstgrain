@@ -14,3 +14,4 @@ from . import purchase_order
 from . import customer_payment
 from . import vehicle_info
 from . import form4
+from . import cbot

@@ -85,11 +85,11 @@
                         </group>
 
                     </group>
-                    <notebook>
-                        <page name="form4" string="Form 4">
+<!--                    <notebook>-->
+<!--                        <page name="form4" string="Form 4">-->
 
-                        </page>
-                    </notebook>
+<!--                        </page>-->
+<!--                    </notebook>-->
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>

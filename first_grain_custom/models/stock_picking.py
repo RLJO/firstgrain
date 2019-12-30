@@ -6,7 +6,10 @@ from datetime import datetime, timedelta, time
 class Inventory(models.Model):
     _inherit = 'stock.picking'
 
-    bill_leading_id = fields.Many2one('bill.leading','Bill No')
+    operation_id = fields.Many2one('operation.logistic','Operation')
+    contract_no = fields.Many2one('contract.form','Contract',related='operation_id.contract_no')
+    policy_id = fields.Many2one('bill.leading' , 'Policy')
+    vessel = fields.Char('Vessel',related='policy_id.vessel')
 
     vehicle_line = fields.One2many('vehicle.info.line','delivery_order')
 
@@ -40,4 +43,26 @@ class Inventory(models.Model):
                      'user_id': user_id.id
                      })
 
+        # Update line in bill of leading
+        if self.policy_id:
+            for line in self.move_ids_without_package:
+                qty = line.quantity_done
+                product = line.product_id
+            delivery_order_line = {
+                'delivery_order_id': self.id,
+                'customer_id': self.partner_id.id,
+                'qty': qty,
+                'product_id': product.id,
+                'bill_leading_id': self.policy_id.id,
+
+            }
+            self.env['delivery.order.type'].create(delivery_order_line)
+
         return res
+
+
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+
+    policy_id = fields.Many2one('bill.leading' , 'Policy',related='picking_id.policy_id')
+    vessel_qty = fields.Float(related='policy_id.quantity')

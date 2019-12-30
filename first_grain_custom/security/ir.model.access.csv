@@ -8,3 +8,4 @@ sale_order_type_access_full,sale_order_type_access_full,model_sale_order_type,ba
 delivery_order_type_access_full,delivery_order_type_access_full,model_delivery_order_type,base.group_user,1,1,1,1
 vehicle_info_access_full,vehicle_info_access_full,model_vehicle_info_line,base.group_user,1,1,1,1
 form4_access_full,form4_access_full,model_form_form,base.group_user,1,1,1,1
+cbot_access_full,cbot_access_full,model_cbot_form,base.group_user,1,1,1,1

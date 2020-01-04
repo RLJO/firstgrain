@@ -14,7 +14,7 @@ class BillLeading(models.Model):
     contract_id = fields.Many2one('contract.form','Contract',domain=lambda self:self._default_sale_line_domain())
     quantity = fields.Float('Quantity')
     date = fields.Date()
-    product_type = fields.Many2one('product.template','Product Type')
+    product_type = fields.Many2one('product.product','Product Type')
     product_description = fields.Char('Product Description')
     vessel = fields.Char('Vessel Type')
     port_leading = fields.Char('Port Of Leading')

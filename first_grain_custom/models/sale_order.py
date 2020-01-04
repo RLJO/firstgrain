@@ -44,7 +44,8 @@ class SaleOrder(models.Model):
         # Delivery Order Data
         for move in self.picking_ids:
             move.update({'operation_id':self.operation_id.id,
-                         'policy_id':self.policy_id.id})
+                         'policy_id':self.policy_id.id,
+                         'contract_no':self.operation_id.contract_no.id})
 
         # Update line in bill of leading
         if self.policy_id:

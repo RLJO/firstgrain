@@ -23,11 +23,58 @@
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='picking_type_id']" position="after">
-                    <field name="operation_id" invisible="1" />
-                    <field name="contract_no" />
-                    <field name="policy_id" />
-                    <field name="vessel" />
+                <xpath expr="//group[2]" position="after">
+                    <group>
+                        <field name="operation_id" invisible="1" />
+                        <field name="contract_no" />
+                        <field name="policy_id" />
+                        <field name="vessel" />
+                        <field name="vessel_qty"/>
+                        <field name="operation_bill_leading" />
+                        <field name="bill_product_qty"/>
+                    </group>
+                    <field name="picking_code" invisible="1"/>
+                    <group attrs="{'invisible':[('picking_code','!=','outgoing')]}" >
+                        <field name="sarf_kind" string="نوع الصرف"/>
+                        <!--       الشهاده-->
+                        <field name="bill_no" string="رقم الشهاده" attrs="{'invisible':[('sarf_kind','!=','direct')]}"/>
+                        <field name="bill_qty" string="أصل كميه الشهاده"  attrs="{'invisible':[('sarf_kind','!=','direct')]}"/>
+                        <!--   المخزن     -->
+                        <field name="stock_no" string="كود المخزن" attrs="{'invisible':[('sarf_kind','!=','stock')]}"/>
+                        <field name="stock_qty" string="أصل الكميه في المخزن"  attrs="{'invisible':[('sarf_kind','!=','stock')]}"/>
+                        <!--     end -->
+                        <field name="monsaref" string="المنصرف" />
+                        <field name="balance" string="الرصيد" />
+                        <field name="baky_mn_elfrag" string="الباقي من الافراج" />
+                        <field name="gararat_no" string="عدد الجرارات المتاحه"/>
+                    </group>
+                    <group attrs="{'invisible':[('picking_code','!=','internal')]}" >
+                        <field name="warehouse_code" string="كود المخزن"/>
+                        <field name="lock_created" invisible="1"/>
+                        <button name="action_generate_location" type='object' string="Generate Location"  attrs="{'invisible':[('lock_created','=',True)]}"></button>
+                    </group>
+                    <group>
+                        <field name="agree_no" string="الموافقه رقم" />
+                    </group>
+                    <group>
+                        <field name="tawsela_kind" string="نوع التوصيله "/>
+                        <field name="mkawel_elnakl" string="مقاول النقل" attrs="{'invisible':[('tawsela_kind','!=','wasaal')]}"/>
+                        <field name="state_id" string="المحافظه" attrs="{'invisible':[('tawsela_kind','!=','wasaal')]}"/>
+                        <field name="agent" string="عميل فرعي" attrs="{'invisible':[('tawsela_kind','!=','wasaal')]}"/>
+                    </group>
+                    <group>
+                        <field name="sale_id" string="عقد البيع"/>
+                        <field name="sale_agent" string="اسم العميل" />
+                        <field name="sale_qty" string="الكميه" />
+                        <field name="sale_monsarf" string="المنصرف" />
+                        <field name="sale_balance" string="الرصيد"/>
+                        <field name="baky_mn_elakd" string="الباقي علي العقد" />
+                        <field name="sale_gararat_no" string="عدد الجرارات"/>
+                    </group>
+                    <group>
+                        <field name="mandob_code" string="كود المندوب" />
+                        <field name="mandob_delivery" string="قيمه العقد مسؤليه المندوب" />
+                    </group>
                 </xpath>
                 <xpath expr="//notebook//page[3]" position="after">
                     <page name="bill_leading" string="Bill Leading">
@@ -53,9 +100,10 @@
                     </page>
 
                 </xpath>
-                <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='product_id']" position="after">
-                    <field name="vessel_qty"/>
-                </xpath>
+
+<!--                <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='product_id']" position="after">-->
+<!--                    -->
+<!--                </xpath>-->
             </field>
         </record>
 </odoo>

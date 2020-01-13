@@ -34,35 +34,117 @@
                     <group>
                         <group>
                             <field name="operation_id"/>
-                            <field name="issue_date"/>
+                            <field name="contract_no"/>
+                            <field name="purchase_id"/>
                             <field name="bank_name"/>
-                            <field name="exporter_name"/>
                         </group>
                         <group>
-                            <field name="address"/>
-                            <field name="id"/>
-                            <field name="product_id"/>
-                            <field name="qty"/>
-                        </group>
-                        <group>
-                            <field name="unit_price"/>
-                            <field name="contract_info"/>
-                            <field name="organ"/>
-                            <field name="product_form"/>
-                        </group>
-                        <group>
-                            <field name="source_doc"/>
-                            <field name="bank_fees"/>
-                            <field name="pay_bank_fees"/>
-                            <field name="attachment_doc"/>
+                            <field name="issue_date"/>
                         </group>
 
                     </group>
-<!--                    <notebook>-->
-<!--                        <page name="form4" string="Form 4">-->
+                    <notebook>
+                        <page name="ahly" string='Al-Ahly Bank' attrs="{'invisible':[('bank_name','!=','ahly')]}" >
 
-<!--                        </page>-->
-<!--                    </notebook>-->
+                        </page>
+                        <page name="araby" string='Al-Arabi Bank' attrs="{'invisible':[('bank_name','!=','arabi')]}" >
+                            <group >
+                                <field name="total_money"/>
+                                <field name="currency_money"/>
+                                <field name="total_money_in_words"/>
+                                <field name="sign"/>
+                            </group>
+                            <group>
+                                <field name="araby_bank_account"/>
+                            </group>
+                            <group string="البيانات التي يحررها المستورد">
+                                <field name="bank_name_arabi"/>
+                                <field name="example_name"/>
+                                <field name="export_name"/>
+                                <field name="main_address"/>
+                                <field name="export_card"/>
+                            </group>
+                            <group string="بيانات البضاعه المستورده">
+                                <field name="product_id_arabi"/>
+                                <field name="qty_arabi"/>
+                                <field name="total_qty"/>
+                                <field name="contract_base"/>
+                                <field name="country_id_araby"/>
+                                <field name="export_country"/>
+                                <field name="exporter_sign"/>
+                            </group>
+                            <group >
+                                <field name="s7b"/>
+                                <field name="invoice_no"/>
+                                <field name="with_date"/>
+                                <field name="with_money"/>
+                                <field name="polisy"/>
+                                <field name="with_date_2"/>
+                                <field name="format_peper"/>
+                                <field name="wiegth_peper"/>
+                                <field name="full_peper"/>
+                                <field name="health_peper"/>
+                                <field name="full_2_peper"/>
+                                <field name="analyse_peper"/>
+                                <field name="others"/>
+                                <field name="sign_watch"/>
+                                <field name="signning"/>
+                            </group>
+                        </page>
+                        <page name="qnb" string='QNB Bank' attrs="{'invisible':[('bank_name','!=','qnb')]}" >
+                            <group string="بيانات المستورد">
+                                <field name="exporter_name"/>
+                                <field name="address"/>
+                                <field name="export_number"/>
+                                <field name="tax_number"/>
+                                <field name="fax"/>
+                                <field name="mobile"/>
+                            </group>
+                            <group string="بيانات البضاعه المستورده">
+                                <group>
+                                    <field name="product_id"/>
+                                    <field name="qty"/>
+                                    <field name="currency_id"/>
+                                    <field name="contract_info"/>
+                                    <field name="country_id"/>
+                                </group>
+                                <group>
+                                    <field name="unit"/>
+                                    <field name="unit_price"/>
+                                    <field name="total_price"/>
+                                    <field name="country_id_2"/>
+                                    <field name="policy_no"/>
+                                </group>
+                            </group>
+                            <group string="بيانات المبلغ">
+                                <field name="currency"/>
+                                <field name="subtotal_in_number"/>
+                                <field name="subtotal_in_word"/>
+                                <field name="doc_amount"/>
+                            </group>
+                            <group string="الغرض من الطلب">
+                                <field name="doc_price"/>
+                            </group>
+                            <group string="بيانات المستفيد (المصدر)">
+                                <field name="exp_name"/>
+                                <field name="exp_addredd"/>
+                                <field name="phone_number"/>
+                                <field name="account_no"/>
+                                <field name="branch"/>
+                                <field name="branch_add"/>
+                                <field name="state_id"/>
+                                <field name="country_id"/>
+                                <field name="swift_code"/>
+                                <field name="other"/>
+                                <field name="masarif_bank"/>
+
+                            </group>
+                            <group>
+                                <field name="signature"/>
+                            </group>
+                        </page>
+
+                    </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>
@@ -118,3 +200,22 @@
               />
 
 </odoo>
+
+<!--<group>-->
+<!--                            <field name="address"/>-->
+<!--                            <field name="id"/>-->
+<!--                            <field name="product_id"/>-->
+<!--                            <field name="qty"/>-->
+<!--                        </group>-->
+<!--                        <group>-->
+<!--                            <field name="unit_price"/>-->
+<!--                            <field name="contract_info"/>-->
+<!--                            <field name="organ"/>-->
+<!--                            <field name="product_form"/>-->
+<!--                        </group>-->
+<!--                        <group>-->
+<!--                            <field name="source_doc"/>-->
+<!--                            <field name="bank_fees"/>-->
+<!--                            <field name="pay_bank_fees"/>-->
+<!--                            <field name="attachment_doc"/>-->
+<!--                        </group>-->

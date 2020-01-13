@@ -54,34 +54,95 @@
                                             <field name="c_country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
                                         </div>
                             <field name="commodity"/>
-                            <field name="quantity"/>
+
                             <field name="quantity_note"/>
-                            <field name="quality"/>
-                            <field name="price"/>
-                            <field name="prov_price"/>
+                            <field name="quantity"/>
                         </group>
                         <group>
                             <field name="source_document_rfq"/>
-                            <field name="payment_term"/>
                             <field name="contract_date"/>
                             <field name="origin"/>
-                            <field name="delivery_term"/>
-                            <field name="shipment_period"/>
-                            <field name="protection"/>
-                            <field name="fail_pay_dil"/>
-                            <field name="load_doc_instruction"/>
-                            <field name="discharge"/>
-                            <field name="licenses"/>
-                            <field name="taxation"/>
-                            <field name="title_risk"/>
-                            <field name="low_jurisduction"/>
-                            <field name="compliance"/>
-                            <field name="antiboycott"/>
-                            <field name="confidentiality"/>
-                            <field name="assignment_clause"/>
-                            <field name="limit_liability"/>
-                            <field name="terms_conds_rule"/>
-                            <field name="language"/>
+                        </group>
+                        <group> <field name="quality"/> </group>
+                        <group> <field name="quality_arabic"/> </group>
+
+                        <group> <field name="delivery_term"/> </group>
+                        <group> <field name="delivery_term_arabic"/> </group>
+
+                        <group> <field name="shipment_period"/> </group>
+                        <group> <field name="shipment_period_arabic"/> </group>
+
+                        <group> <field name="supervision"/> </group>
+                        <group> <field name="supervision_arabic"/> </group>
+
+                        <group> <field name="weight"/> </group>
+                        <group> <field name="weight_arabic"/> </group>
+
+                        <group> <field name="condition"/> </group>
+                        <group> <field name="condition_arabic"/> </group>
+
+                        <group> <field name="price"/></group>
+                        <group> <field name="price_arabic"/> </group>
+
+                        <group> <field name="prov_price"/></group>
+                        <group> <field name="prov_price_arabic"/> </group>
+
+                        <group> <field name="payment_term"/></group>
+                        <group> <field name="payment_term_arabic"/> </group>
+
+                        <group> <field name="protection"/></group>
+                        <group> <field name="protection_arabic"/> </group>
+
+                        <group> <field name="fail_pay_dil"/></group>
+                        <group> <field name="fail_pay_dil_arabic"/> </group>
+
+                        <group> <field name="load_doc_instruction"/></group>
+                        <group> <field name="load_doc_instruction_arabic"/> </group>
+
+                        <group> <field name="discharge"/> </group>
+                        <group> <field name="discharge_arabic"/> </group>
+
+                        <group> <field name="licenses"/></group>
+                        <group> <field name="licenses_arabic"/></group>
+
+                        <group> <field name="taxation"/> </group>
+                        <group> <field name="taxation_arabic"/> </group>
+
+                        <group> <field name="title_risk"/> </group>
+                        <group> <field name="title_risk_arabic"/> </group>
+
+                        <group> <field name="low_jurisduction"/> </group>
+                        <group> <field name="low_jurisduction_arabic"/> </group>
+
+                        <group> <field name="compliance"/></group>
+                        <group> <field name="compliance_arabic"/> </group>
+
+                        <group> <field name="antiboycott"/> </group>
+                        <group> <field name="antiboycott_arabic"/></group>
+
+                        <group> <field name="confidentiality"/></group>
+                        <group> <field name="confidentiality_arabic"/></group>
+
+                        <group> <field name="assignment_clause"/></group>
+                        <group> <field name="assignment_clause_arabic"/></group>
+
+                        <group> <field name="limit_liability"/></group>
+                        <group> <field name="limit_liability_arabic"/></group>
+
+                        <group> <field name="terms_conds_rule"/></group>
+                        <group> <field name="terms_conds_rule_arabic"/></group>
+
+                        <group> <field name="language"/></group>
+                        <group> <field name="language_arabic"/></group>
+
+
+                        <group string="RFQ Data">
+                            <field name="rfq_vendor"/>
+                            <field name="limit_up_to"/>
+                            <field name="premium_from"/>
+                            <field name="purchase_type"/>
+                            <field name="monthly_plan"/>
+
                         </group>
 
                     </group>

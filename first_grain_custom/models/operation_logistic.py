@@ -318,7 +318,7 @@ class Operation(models.Model):
     #  Form 4 Data
     form4 = fields.Many2one('form.form','Form 4')
     issue_date = fields.Date('Issue Date' ,related='form4.issue_date')
-    bank_name = fields.Char('Bank Name',related='form4.bank_name')
+    bank_name = fields.Selection('Bank Name',related='form4.bank_name')
     exporter_name = fields.Char('Exporter name',related='form4.exporter_name')
     address = fields.Char('Address',related='form4.address')
     id = fields.Integer('ID',related='form4.id')
@@ -327,7 +327,7 @@ class Operation(models.Model):
     unit_price = fields.Float('Price Unit',related='form4.unit_price')
     contract_info = fields.Char('أساس التعاقد',related='form4.contract_info')
 
-    organ = fields.Char('Organ',related='form4.organ')
+    organ = fields.Char('Organ')
     product_form = fields.Char('Product Form',related='form4.product_form')
     source_doc = fields.Char('Source Document',related='form4.source_doc')
     bank_fees = fields.Float('Bank Fees',related='form4.bank_fees')

@@ -62,13 +62,13 @@
                                         <field name="unit_price"/>
                                         <field name="contract_info"/>
                                         <field name="organ"/>
-                                        <field name="product_form"/>
+<!--                                        <field name="product_form"/>-->
                                     </group>
                                     <group>
-                                        <field name="source_doc"/>
-                                        <field name="bank_fees"/>
-                                        <field name="pay_bank_fees"/>
-                                        <field name="attachment_doc"/>
+<!--                                        <field name="source_doc"/>-->
+<!--                                        <field name="bank_fees"/>-->
+<!--                                        <field name="pay_bank_fees"/>-->
+<!--                                        <field name="attachment_doc"/>-->
                                         <field name="show_review" invisible="1"/>
 
                                     </group>

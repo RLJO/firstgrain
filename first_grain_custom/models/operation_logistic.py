@@ -328,8 +328,4 @@ class Operation(models.Model):
     contract_info = fields.Char('أساس التعاقد',related='form4.contract_info')
 
     organ = fields.Char('Organ')
-    product_form = fields.Char('Product Form',related='form4.product_form')
-    source_doc = fields.Char('Source Document',related='form4.source_doc')
-    bank_fees = fields.Float('Bank Fees',related='form4.bank_fees')
-    pay_bank_fees = fields.Float('Pay Bank Fees Issue',related='form4.pay_bank_fees')
-    attachment_doc = fields.Binary(related='form4.attachment_doc')
+  

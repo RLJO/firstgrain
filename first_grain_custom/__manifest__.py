@@ -31,5 +31,7 @@
         'views/customer_payment_view.xml',
         'views/form4_view.xml',
         'views/cbot_view.xml',
+        'views/vendor_payment.xml',
+        'views/accept_import_view.xml',
     ],
 }

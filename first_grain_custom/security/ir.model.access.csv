@@ -1,5 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-budget_line_access_full,budget_line_access_full,model_crossovered_budget_new_line,base.group_user,1,1,1,1
+budget_line_access_full,budget_line_access_full,model_crossovered_budget_new_line,base.group_user,0,1,1,1
+budget_line_access_full_2,budget_line_access_full_2,model_crossovered_budget_new_line,first_grain_custom.group_ex_manager,1,1,1,1
+
 operation_logistic_access_full,operation_logistic_access_full,model_operation_logistic,base.group_user,1,1,1,1
 contract_form_access_full,contract_form_access_full,model_contract_form,base.group_user,1,1,1,1
 operation_log_access_full,operation_log_access_full,model_operation_log,base.group_user,1,1,1,1
@@ -9,3 +11,4 @@ delivery_order_type_access_full,delivery_order_type_access_full,model_delivery_o
 vehicle_info_access_full,vehicle_info_access_full,model_vehicle_info_line,base.group_user,1,1,1,1
 form4_access_full,form4_access_full,model_form_form,base.group_user,1,1,1,1
 cbot_access_full,cbot_access_full,model_cbot_form,base.group_user,1,1,1,1
+accept_import_access_full,accept_import_access_full,model_accept_import,base.group_user,1,1,1,1

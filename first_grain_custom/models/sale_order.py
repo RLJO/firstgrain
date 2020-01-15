@@ -47,6 +47,33 @@ class SaleOrder(models.Model):
                          'policy_id':self.policy_id.id,
                          'contract_no':self.operation_id.contract_no.id})
 
+        # send notification for (logistic specialist) that delivery order created
+
+        logistic_manger_id = self.env.ref('first_grain_custom.group_logistic_manager').id
+        users_ids = self.env['res.users'].search(
+            [('groups_id', 'in', [logistic_manger_id])])
+
+        move_id = self.picking_ids.ids[len(self.picking_ids.ids)-1]
+        pick = self.env['stock.picking'].search([('id','=',move_id)])
+
+        if pick and user_ids:
+                pick.notifi_state = 'Delivery Order ' + pick.name + 'has been created'
+                for user_id in user_ids:
+                    activity_ins = self.env['mail.activity'].sudo().create(
+                        {'res_id': pick.id,
+                        'res_model_id': self.env['ir.model'].search([('model', '=', 'stock.picking')], limit=1).id,
+                        'res_model': 'stock.picking',
+                        'activity_type_id': 4,
+                        'summary': 'Delivery Order created',
+                        'note':  'Delivery Order ' + pick.name + 'has been created',
+                        'date_deadline': fields.Date.today() ,
+                        'activity_category': 'default',
+                        'previous_activity_type_id': False,
+                        'recommended_activity_type_id': False,
+                        'user_id': user_id.id
+                        })
+
+
         # Update line in bill of leading
         if self.policy_id:
             for line in self.order_line:

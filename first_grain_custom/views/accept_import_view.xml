@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="accept_import_tree" model="ir.ui.view">
+        <field name="name">accept.import.tree</field>
+        <field name="model">accept.import</field>
+        <field name="arch" type="xml">
+            <tree string="Accept Import">
+                <field name="operation_id" />
+                <field name="product_id" />
+                <field name="acceptation_agri"/>
+                <field name="vessel_name"/>
+                <field name="bill_leading"/>
+                <field name="organ" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="accept_import_view_form" model="ir.ui.view">
+        <field name="name">accept.import.form</field>
+        <field name="model">accept.import</field>
+        <field name="arch" type="xml">
+            <form>
+                 <header>
+                    <button string="Prepare" type="object"  name="action_prepare" states="draft" groups="first_grain_custom.group_logistic_manager" class="oe_highlight"/>
+                    <button string="Done" type="object"  name="action_done" states="prepare" groups="first_grain_custom.group_logistic_manager" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <label class="col-form-label" for="name">Number</label>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="operation_id" />
+                            <field name="product_id" />
+                            <field name="acceptation_agri"/>
+                            <field name="vessel_name"/>
+                            <field name="bill_leading"/>
+                            <field name="port_dest"/>
+                            <field name="organ" />
+                        </group>
+                        <group>
+                            <field name="cortication_no"/>
+                            <field name="cortication_date"/>
+                            <field name="invoice_no"/>
+                            <field name="invoice_date"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="accept_import_kanban_view_form" model="ir.ui.view">
+            <field name="name">accept.import.kanban</field>
+            <field name="model">accept.import</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div>
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div>
+                                    <span><field name="notifi_status"/>&amp;nbsp;</span>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+    </record>
+
+
+    <record id="accept_import_action_main" model="ir.actions.act_window">
+        <field name="name">Accept Import</field>
+        <field name="res_model">accept.import</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <menuitem name="Accept Import"
+              id="accept_import_menu_first"
+              groups="base.group_user"
+              sequence="8"
+              action="accept_import_action_main"
+              />
+
+    <menuitem name="Accept Import"
+              id="accept_import_menu_second"
+              action="accept_import_action_main"
+              groups="base.group_user"
+              sequence="1"
+              parent="accept_import_menu_first"
+              />
+
+</odoo>

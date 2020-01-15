@@ -15,6 +15,9 @@
                         <field name="grar_avarage" string="متوسط كل جرار"/>
                     </group>
                 </xpath>
+                <xpath expr="//field[@name='type']" position="before">
+                    <field name="equivalent"/>
+                </xpath>
             </field>
         </record>
 </odoo>

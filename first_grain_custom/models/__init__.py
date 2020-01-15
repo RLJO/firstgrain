@@ -15,3 +15,5 @@ from . import customer_payment
 from . import vehicle_info
 from . import form4
 from . import cbot
+from . import vendor_payment
+from . import accept_import

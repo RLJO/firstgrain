@@ -156,6 +156,24 @@
                                 </group>
                             </group>
                         </page>
+                        <page string="Accept Import">
+                            <group>
+                                <group>
+                                    <field name="product_id" />
+                                    <field name="acceptation_agri"/>
+                                    <field name="vessel_name"/>
+                                    <field name="bill_leading"/>
+                                    <field name="port_dest"/>
+                                    <field name="organ" />
+                                </group>
+                                <group>
+                                     <field name="cortication_no"/>
+                                    <field name="cortication_date"/>
+                                    <field name="invoice_no"/>
+                                    <field name="invoice_date"/>
+                                </group>
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">

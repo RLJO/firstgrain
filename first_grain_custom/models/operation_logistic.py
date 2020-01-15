@@ -259,7 +259,6 @@ class Operation(models.Model):
     def action_prepare(self):
         self.state = 'prepare'
         # Create Form 4
-
         form_vals = {
             'name':self.name +' Form 4',
             'operation_id':self.id,
@@ -286,6 +285,36 @@ class Operation(models.Model):
                      'recommended_activity_type_id': False,
                      'user_id': user_id.id
                      })
+
+    #     create accept import
+        accept_import = self.env['accept.import'].create({
+            'name':self.name+' - Accept Import ',
+            'operation_id': self.id,
+            'state':'draft',
+        })
+
+        self.accept_import = accept_import.id
+    #     send notification that the accept import created
+        logistic_manger_id = self.env.ref('first_grain_custom.group_logistic_manager').id
+        users_ids = self.env['res.users'].search(
+            [('groups_id', 'in', [logistic_manger_id])])
+        if users_ids:
+                accept_import.notifi_status = 'Accept Import ' + accept_import.name + 'has been created'
+                for user_id in users_ids:
+                    activity_ins = self.env['mail.activity'].sudo().create(
+                        {'res_id': accept_import.id,
+                         'res_model_id': self.env['ir.model'].search([('model', '=', 'accept.import')], limit=1).id,
+                         'res_model': 'accept.import',
+                         'activity_type_id': 4,
+                         'summary': 'Accept Import created',
+                         'note': 'Accept Import ' + accept_import.name + 'has been created',
+                         'date_deadline': fields.Date.today(),
+                         'activity_category': 'default',
+                         'previous_activity_type_id': False,
+                         'recommended_activity_type_id': False,
+                         'user_id': user_id.id
+                         })
+
 
 
     def write(self,vals):
@@ -328,4 +357,16 @@ class Operation(models.Model):
     contract_info = fields.Char('أساس التعاقد',related='form4.contract_info')
 
     organ = fields.Char('Organ')
-  
+
+    # Accept Import data
+
+    accept_import = fields.Many2one('accept.import','Accept Import')
+    acceptation_agri = fields.Char('موافقه وزاره الزراعه',related='accept_import.acceptation_agri')
+    vessel_name = fields.Char('اسم الباخره',related='accept_import.vessel_name')
+    bill_leading = fields.Char('ارقام بوالص الشحن',related='accept_import.bill_leading')
+    port_dest = fields.Char('Port of Destination',related='accept_import.port_dest')
+    organ = fields.Char('Organ',related='accept_import.organ')
+    cortication_no = fields.Char(' Number of Cortication',related='accept_import.cortication_no')
+    cortication_date = fields.Date('Date of Cortication',related='accept_import.cortication_date')
+    invoice_no = fields.Many2one('account.move', 'Invoice No',related='accept_import.invoice_no')
+    invoice_date = fields.Date('Date of Invoice',related='accept_import.invoice_date')

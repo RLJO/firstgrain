@@ -7,3 +7,5 @@ class ProductTemplate(models.Model):
     analytic_account_id = fields.Many2one('account.analytic.account','Analytic Account')
 
     grar_avarage = fields.Float(default=1)
+
+    equivalent = fields.Float('Equivalent')

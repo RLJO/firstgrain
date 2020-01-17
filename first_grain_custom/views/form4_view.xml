@@ -45,7 +45,81 @@
                     </group>
                     <notebook>
                         <page name="ahly" string='Al-Ahly Bank' attrs="{'invisible':[('bank_name','!=','ahly')]}" >
-
+                            <group>
+                                <group>
+                                    <field name="company_name"/>
+                                    <field name="money"/>
+                                    <field name="money_in_words"/>
+                                    <field name="bank_ahly_account"/>
+                                    <field name="ahly_asign"/>
+                                </group>
+                                <group string="نتعهد نحن">
+                                    <field name="company_name_for"/>
+                                    <field name="money_for"/>
+                                    <field name="invoice_number"/>
+                                    <field name="for_assign"/>
+                                </group>
+                                <group>
+                                    <field name="cairo_at"/>
+                                    <field name="with_value_of"/>
+                                    <field name="with_value_of_in_word"/>
+                                    <field name="maturity_date"/>
+                                    <field name="supplier"/>
+                                    <field name="invoice"/>
+                                    <field name="signature_form"/>
+                                </group>
+                                <group>
+                                    <field name="date"/>
+                                    <field name="bank_branch"/>
+                                    <field name="benefet_name"/>
+                                    <field name="total_money_doc"/>
+                                    <field name="currency_ids"/>
+                                    <field name="payment_term"/>
+                                    <field name="anti_doc"/>
+                                    <field name="payment_money"/>
+                                    <field name="payment_date"/>
+                                    <h3>مقدمه لسيادتكم</h3>
+                                        <field name="name_sign"/>
+                                        <field name="name_signture"/>
+                                </group>
+                                <group string="تعهد رقم 2">
+                                    <field name="date2"/>
+                                    <field name="import_name"/>
+                                    <field name="money2"/>
+                                    <field name="money2_in_words"/>
+                                    <field name="company_name_2"/>
+                                    <field name="company_address_2"/>
+                                    <field name="segel_togary"/>
+                                    <field name="name_signture_2"/>
+                                    <field name="his_title"/>
+                                    <field name="compony_name"/>
+                                    <field name="name_signture_right_2"/>
+                                    <field name="title"/>
+                                    <field name="name_signture_2"/>
+                                </group>
+                                <group string="بيانات المستورد">
+                                    <field name="importer_name"/>
+                                    <field name="importer_address"/>
+                                    <field name="importer_card"/>
+                                    <field name="tax_card"/>
+                                </group>
+                                <group string="بيانات عن البضاعه المستورده">
+                                    <field name="product_id_2"/>
+                                    <field name="product_qty"/>
+                                    <field name="unit_o_m"/>
+                                    <field name="unit_money"/>
+                                    <field name="contract_base2"/>
+                                    <field name="contry"/>
+                                    <field name="contry_2"/>
+                                </group>
+                                <group>
+                                    <field name="comp_name"/>
+                                    <field name="signn"/>
+                                    <h3>التمويل</h3>
+                                    <field name="funding_resource"/>
+                                    <field name="funding_way"/>
+                                </group>
+                            </group>
                         </page>
                         <page name="araby" string='Al-Arabi Bank' attrs="{'invisible':[('bank_name','!=','arabi')]}" >
                             <group >

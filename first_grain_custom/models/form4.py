@@ -54,16 +54,26 @@ class BillLeading(models.Model):
     masarif_bank = fields.Boolean('مصاريف بنك المستفيد (المصدر)      علي المستورد')
     signature = fields.Char('أمضاء')
 
-    @api.depends('currency','subtotal_in_number','currency_money','total_money')
+    @api.depends('currency','subtotal_in_number','currency_money','total_money','currency_ids')
     def currency_text(self):
         if self.currency:
             self.subtotal_in_word =  self.currency.amount_to_text(self.subtotal_in_number)
         else:
             self.subtotal_in_word = ''
+
         if self.total_money :
             self.total_money_in_words =self.currency_money.amount_to_text(self.total_money)
         else:
             self.total_money_in_words = ''
+
+        if self.currency_ids :
+            self.money_in_words = self.currency_ids.amount_to_text(self.money)
+            self.with_value_of_in_word = self.currency_ids.amount_to_text(self.with_value_of)
+            self.money2_in_words = self.currency_ids.amount_to_text(self.money2)
+        else:
+            self.money_in_words = ''
+            self.with_value_of_in_word = ''
+            self.money2_in_words = ''
 
     # El Arabi
 
@@ -116,9 +126,75 @@ class BillLeading(models.Model):
     notification_status = fields.Char()
     state = fields.Selection([('draft', 'Draft'),('prepare','Prepare'), ('done', 'Done')], default='draft', string="State", index=True)
 
+    # AL-AHLY BANK
+
+    company_name = fields.Char('الشركه')
+    money = fields.Float('المبلغ')
+    money_in_words = fields.Char(compute='currency_text')
+    bank_ahly_account = fields.Char('رقم الحساب')
+    ahly_asign = fields.Char('التوقيع')
+
+    company_name_for = fields.Char(' لـ شركه')
+    money_for = fields.Float('المبلغ')
+    invoice_number = fields.Char('رقم الفاتوره')
+    for_assign =  fields.Char('التوقيع')
+
+    cairo_at = fields.Date('Cairo At')
+    with_value_of =  fields.Float('With Value Of')
+    with_value_of_in_word =  fields.Char('With Value Of')
+    maturity_date = fields.Date('Maturity Date')
+    supplier = fields.Char('Supplier')
+    invoice = fields.Char('Invoice No')
+    signature_form = fields.Char('Signature')
+    
+    date = fields.Date('التاريخ')
+    bank_branch = fields.Char('فرع البنك')
+    benefet_name = fields.Char('اسم المستفيد')
+    total_money_doc = fields.Float('اجمالي مبلغ التحصيل المستندي')
+    currency_ids = fields.Many2one('res.currency','العمله')
+    payment_term = fields.Char('شروط السداد')
+    anti_doc = fields.Char('ضد المستندات')
+    payment_money = fields.Float('مبلغ الاستحقاق')
+    payment_date = fields.Date('تاريخ الاستحقاق')
+    name_sign = fields.Char('الاسم')
+    name_signture = fields.Char('التوقيع')
+
+    date2 = fields.Date('التاريخ')
+    import_name = fields.Char('اسم المورد بالانجليزيه')
+    money2 = fields.Float('المبلغ')
+    money2_in_words = fields.Char(compute='currency_text')
+    company_name_2 = fields.Char('نقر نحن شركه')
+    company_address_2 = fields.Char( 'المركز الرئيسي')
+    segel_togary = fields.Char('سجل تجاري رقم')
+    name_signture_2 = fields.Char('التوقيع')
+    his_title = fields.Char('صفته')
+    compony_name = fields.Char('اسم الشركه')
+    name_signture_right_2 = fields.Char('من له حق التوقيع')
+    title = fields.Char('الصفه')
+    name_signture_2 = fields.Char('التوقيع')
+
+    importer_name = fields.Char('اسم المستورد')
+    importer_address = fields.Char('عنوان النشاط الرئيسي')
+    importer_card = fields.Char('رقم البطاقه الاستراديه/الاجتياجات')
+    tax_card = fields.Char('رقم البطاقه الضريبيه')
+
+    product_id_2 = fields.Many2one('product.template','السلعه')
+    product_qty = fields.Float('الكميه')
+    unit_o_m = fields.Many2one('uom.uom','وحده القياس')
+    unit_money = fields.Float('اجمالي القيمه بالعمله الاجنبيه')
+    contract_base2 = fields.Char('اساس التعاقد')
+    contry = fields.Many2one('res.country','بلد المنشأ')
+    contry_2 = fields.Many2one('res.country','بلد المستورده منها البضاعه')
+
+    comp_name = fields.Char('اسم الشركه')
+    signn = fields.Char('التوقيع')
+
+    funding_resource = fields.Char('مصدر التمويل')
+    funding_way = fields.Char('طريقه السداد')
 
     def action_form_prepare(self):
         self.state = 'prepare'
 
     def action_form_done(self):
         self.state = 'done'
+
